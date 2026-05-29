@@ -1,0 +1,177 @@
+@import "tailwindcss";
+
+@font-face {
+  font-family: "Awesome Serif";
+  src: url("/fonts/AwesomeSerif-Regular.otf") format("opentype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Awesome Serif";
+  src: url("/fonts/AwesomeSerif-MediumRegular.otf") format("opentype");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Awesome Serif";
+  src: url("/fonts/AwesomeSerif-SemiBoldRegular.otf") format("opentype");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Awesome Serif";
+  src: url("/fonts/AwesomeSerif-BoldRegular.otf") format("opentype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Awesome Serif";
+  src: url("/fonts/AwesomeSerifItalic-Regular.otf") format("opentype");
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Awesome Serif";
+  src: url("/fonts/AwesomeSerifItalic-MedRegular.otf") format("opentype");
+  font-weight: 500;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Apercu";
+  src: url("/fonts/apercu-thin.woff2") format("woff2"),
+       url("/fonts/apercu-thin.woff") format("woff");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Apercu";
+  src: url("/fonts/apercu-regular.woff2") format("woff2"),
+       url("/fonts/apercu-regular.woff") format("woff");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Apercu";
+  src: url("/fonts/apercu-medium.woff2") format("woff2"),
+       url("/fonts/apercu-medium.woff") format("woff");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@theme {
+  --font-serif: "Awesome Serif", "Cormorant Garamond", Georgia, serif;
+  --font-sans: "Apercu", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+
+  --color-ink: #0f1d2b;
+  --color-ink-soft: #344558;
+  --color-muted: #6b7a8c;
+  --color-line: #e6ebf1;
+  --color-paper: #ffffff;
+  --color-mist: #f6f8fb;
+
+  --color-reuvy-50: #f3f7fb;
+  --color-reuvy-100: #e5eef5;
+  --color-reuvy-200: #cfdfeb;
+  --color-reuvy-300: #b6cee0;
+  --color-reuvy-400: #9bb7d1;
+  --color-reuvy-500: #7fa1c2;
+  --color-reuvy-600: #5f86ad;
+  --color-reuvy-700: #486a8d;
+  --color-reuvy-800: #344f6b;
+  --color-reuvy-900: #233649;
+}
+
+@layer base {
+  :root {
+    color-scheme: light;
+  }
+  html, body {
+    background: var(--color-paper);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  ::selection {
+    background: var(--color-reuvy-200);
+    color: var(--color-ink);
+  }
+  h1, h2, h3 {
+    font-family: var(--font-serif);
+    letter-spacing: -0.015em;
+    color: var(--color-ink);
+  }
+  h1 { font-weight: 500; line-height: 1.02; }
+  h2 { font-weight: 500; line-height: 1.05; }
+  h3 { font-weight: 500; line-height: 1.15; }
+  p  { color: var(--color-ink-soft); }
+}
+
+@layer utilities {
+  .container-x {
+    max-width: 1200px;
+    margin-inline: auto;
+    padding-inline: 1.25rem;
+  }
+  @media (min-width: 768px) {
+    .container-x { padding-inline: 2rem; }
+  }
+  .tinted {
+    background: linear-gradient(180deg, rgba(155,183,209,0.10) 0%, rgba(155,183,209,0.04) 100%);
+  }
+  .hairline { border-color: var(--color-line); }
+}
+
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.fade-up { animation: fade-up 0.7s cubic-bezier(0.2, 0.65, 0.2, 1) both; }
+.fade-up-2 { animation: fade-up 0.7s 0.1s cubic-bezier(0.2, 0.65, 0.2, 1) both; }
+.fade-up-3 { animation: fade-up 0.7s 0.2s cubic-bezier(0.2, 0.65, 0.2, 1) both; }
+.fade-up-4 { animation: fade-up 0.7s 0.3s cubic-bezier(0.2, 0.65, 0.2, 1) both; }
+
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+.marquee { animation: marquee 38s linear infinite; }
+
+/* Pabau-style shimmer for loading bars */
+@keyframes shimmer {
+  0%   { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+.shimmer-overlay {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.55) 50%,
+    transparent 100%
+  );
+  animation: shimmer 2.2s ease-in-out infinite;
+}
+
+/* Smooth in-page anchor scrolling */
+html { scroll-behavior: smooth; }
+
+/* Respect users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+  .marquee, .shimmer-overlay { animation: none !important; }
+}
