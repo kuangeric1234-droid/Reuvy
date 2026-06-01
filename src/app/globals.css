@@ -1,5 +1,6 @@
 @import "tailwindcss";
 
+/* ---------- Awesome Serif (display) ---------- */
 @font-face {
   font-family: "Awesome Serif";
   src: url("/fonts/AwesomeSerif-Regular.otf") format("opentype");
@@ -43,6 +44,7 @@
   font-display: swap;
 }
 
+/* ---------- Apercu (sans / body / UI) ---------- */
 @font-face {
   font-family: "Apercu";
   src: url("/fonts/apercu-thin.woff2") format("woff2"),
@@ -68,104 +70,107 @@
   font-display: swap;
 }
 
+/* ---------- Design tokens ---------- */
 @theme {
-  --font-serif: "Awesome Serif", "Cormorant Garamond", Georgia, serif;
-  --font-sans: "Apercu", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-serif: "Awesome Serif", "Newsreader", Georgia, "Times New Roman", serif;
+  --font-sans: "Apercu", "Helvetica Neue", Helvetica, Arial, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), "Geist Mono", ui-monospace, "SF Mono", Menlo, monospace;
 
-  --color-ink: #0f1d2b;
-  --color-ink-soft: #344558;
-  --color-muted: #6b7a8c;
-  --color-line: #e6ebf1;
-  --color-paper: #ffffff;
-  --color-mist: #f6f8fb;
+  /* monochrome + warm neutrals */
+  --color-paper:    #f9f9f7;
+  --color-black:    #000000;
+  --color-ink:      #0f0f0e;
+  --color-ink-soft: #1c1c1b;
+  --color-charcoal: #4d4d4c;
+  --color-greige:   #e5e3de;
+  --color-greige-2: #efedea;
+  --color-white:    #ffffff;
+  --color-mute:     #a6a399;
+  --color-soft:     #b9b6ad;
 
-  --color-reuvy-50: #f3f7fb;
-  --color-reuvy-100: #e5eef5;
-  --color-reuvy-200: #cfdfeb;
-  --color-reuvy-300: #b6cee0;
-  --color-reuvy-400: #9bb7d1;
-  --color-reuvy-500: #7fa1c2;
-  --color-reuvy-600: #5f86ad;
-  --color-reuvy-700: #486a8d;
-  --color-reuvy-800: #344f6b;
-  --color-reuvy-900: #233649;
+  /* dusty blue accent — used sparingly */
+  --color-blue:     #9bb7d1;
+  --color-blue-ink: #5b7790;
 }
 
 @layer base {
   :root {
     color-scheme: light;
   }
-  html, body {
+  *, *::before, *::after { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
     background: var(--color-paper);
-    color: var(--color-ink);
+    color: var(--color-black);
     font-family: var(--font-sans);
+    font-size: 17px;
+    line-height: 1.6;
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
   }
-  ::selection {
-    background: var(--color-reuvy-200);
-    color: var(--color-ink);
-  }
-  h1, h2, h3 {
+  h1, h2, h3, h4 {
     font-family: var(--font-serif);
-    letter-spacing: -0.015em;
-    color: var(--color-ink);
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    line-height: 1.08;
+    margin: 0;
+    text-wrap: pretty;
+    font-optical-sizing: auto;
   }
-  h1 { font-weight: 500; line-height: 1.02; }
-  h2 { font-weight: 500; line-height: 1.05; }
-  h3 { font-weight: 500; line-height: 1.15; }
-  p  { color: var(--color-ink-soft); }
+  h2 em, h3 em, h4 em, h1 em { font-style: italic; color: var(--color-blue-ink); }
+  p { margin: 0; text-wrap: pretty; }
+  a { color: inherit; text-decoration: none; }
+  ::selection { background: color-mix(in srgb, var(--color-blue) 35%, transparent); color: var(--color-ink); }
 }
 
 @layer utilities {
-  .container-x {
+  .wrap {
     max-width: 1200px;
-    margin-inline: auto;
-    padding-inline: 1.25rem;
+    margin: 0 auto;
+    padding: 0 40px;
   }
-  @media (min-width: 768px) {
-    .container-x { padding-inline: 2rem; }
+  @media (max-width: 720px) {
+    .wrap { padding: 0 22px; }
   }
-  .tinted {
-    background: linear-gradient(180deg, rgba(155,183,209,0.10) 0%, rgba(155,183,209,0.04) 100%);
+  .section { padding: 110px 0; }
+  .section-sm { padding: 64px 0; }
+  @media (max-width: 720px) {
+    .section { padding: 72px 0; }
   }
-  .hairline { border-color: var(--color-line); }
+  .mono {
+    font-family: var(--font-mono);
+    font-feature-settings: "tnum" 1;
+  }
+  .eyebrow {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-charcoal);
+    margin: 0 0 22px;
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+  }
+  .eyebrow::before {
+    content: "";
+    width: 18px;
+    height: 1px;
+    background: var(--color-blue-ink);
+    opacity: 0.75;
+  }
+  .eyebrow.on-dark { color: var(--color-soft); }
+  .eyebrow.on-dark::before { background: var(--color-soft); }
 }
 
-@keyframes fade-up {
-  from { opacity: 0; transform: translateY(12px); }
-  to   { opacity: 1; transform: translateY(0); }
+/* ---------- Caret blink for AI mock ---------- */
+@keyframes caret-blink {
+  50% { opacity: 0; }
 }
-.fade-up { animation: fade-up 0.7s cubic-bezier(0.2, 0.65, 0.2, 1) both; }
-.fade-up-2 { animation: fade-up 0.7s 0.1s cubic-bezier(0.2, 0.65, 0.2, 1) both; }
-.fade-up-3 { animation: fade-up 0.7s 0.2s cubic-bezier(0.2, 0.65, 0.2, 1) both; }
-.fade-up-4 { animation: fade-up 0.7s 0.3s cubic-bezier(0.2, 0.65, 0.2, 1) both; }
+.caret-blink { animation: caret-blink 1.1s steps(1) infinite; }
 
-@keyframes marquee {
-  from { transform: translateX(0); }
-  to   { transform: translateX(-50%); }
-}
-.marquee { animation: marquee 38s linear infinite; }
-
-/* Pabau-style shimmer for loading bars */
-@keyframes shimmer {
-  0%   { transform: translateX(-100%); }
-  100% { transform: translateX(100%); }
-}
-.shimmer-overlay {
-  background: linear-gradient(
-    90deg,
-    transparent 0%,
-    rgba(255, 255, 255, 0.55) 50%,
-    transparent 100%
-  );
-  animation: shimmer 2.2s ease-in-out infinite;
-}
-
-/* Smooth in-page anchor scrolling */
-html { scroll-behavior: smooth; }
-
-/* Respect users who prefer reduced motion */
+/* ---------- Reduced motion ---------- */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.001ms !important;
@@ -173,5 +178,4 @@ html { scroll-behavior: smooth; }
     transition-duration: 0.001ms !important;
     scroll-behavior: auto !important;
   }
-  .marquee, .shimmer-overlay { animation: none !important; }
 }

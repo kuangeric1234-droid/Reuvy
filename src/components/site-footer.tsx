@@ -1,147 +1,93 @@
 import Link from "next/link";
-import { Instagram, Facebook, Linkedin } from "lucide-react";
-import { FEATURE_CATEGORIES, FEATURE_BY_SLUG, PRACTICES } from "@/lib/site-data";
+
+const COLS = [
+  {
+    title: "Product",
+    links: [
+      ["Clinical records", "#features"],
+      ["Scheduling", "#features"],
+      ["Payments & POS", "#features"],
+      ["Inventory", "#features"],
+      ["Ruevii AI", "#ai"],
+    ],
+  },
+  {
+    title: "Solutions",
+    links: [
+      ["Injectable clinics", "#"],
+      ["Cosmetic & skin", "#"],
+      ["Multi-site groups", "#"],
+      ["Nurses & injectors", "#"],
+    ],
+  },
+  {
+    title: "Company",
+    links: [
+      ["About", "#"],
+      ["AHPRA compliance", "#compliance"],
+      ["Pricing", "#pricing"],
+      ["Contact", "#"],
+    ],
+  },
+  {
+    title: "Legal",
+    links: [
+      ["Privacy", "#"],
+      ["Terms", "#"],
+      ["Security", "#"],
+      ["Data residency", "#"],
+    ],
+  },
+];
 
 export function SiteFooter() {
-  const productSlugs = [
-    "calendar",
-    "online-booking",
-    "emr",
-    "payments",
-    "scribe",
-    "campaigns",
-    "before-after",
-    "reporting",
-    "inventory",
-    "mobile-app",
-  ];
-
-  const specialtySlugs = [
-    "med-spa",
-    "aesthetics-clinic",
-    "dermatology",
-    "physio",
-    "wellness",
-    "hair-clinic",
-    "iv-therapy",
-    "cosmetic-surgery",
-    "mental-health",
-    "enterprise",
-    "solo",
-  ];
-
   return (
-    <footer className="bg-[var(--color-ink)] text-white">
-      <div className="container-x py-20 md:py-24">
-        <div className="grid lg:grid-cols-12 gap-12 lg:gap-8">
-          <div className="lg:col-span-4">
-            <Link href="/" className="flex items-center gap-2">
-              <span className="grid place-items-center h-9 w-9 rounded-full bg-[var(--color-reuvy-400)] text-[var(--color-ink)] font-serif text-lg">
-                R
+    <footer className="bg-[var(--color-ink)] text-[var(--color-soft)] pt-20 pb-10">
+      <div className="wrap">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:[grid-template-columns:1.6fr_repeat(4,1fr)] gap-10 pb-14 border-b border-[#2c2c29]">
+          <div>
+            <Link href="/" className="flex items-center gap-[9px] font-serif text-[25px] tracking-[-0.02em] text-[#fafaf8] mb-[18px]">
+              <span aria-hidden className="relative w-[22px] h-[22px] rounded-[5px] bg-[#fafaf8] grid place-items-center">
+                <span className="w-2 h-2 rounded-full bg-[var(--color-ink)]" />
               </span>
-              <span className="font-serif text-2xl tracking-tight">Reuvy</span>
+              Ruevii
             </Link>
-            <p className="mt-6 text-white/70 max-w-sm leading-relaxed">
-              The quietly powerful system behind 3,500+ practices delivering modern,
-              considered care.
+            <p className="text-[14px] max-w-[30ch] leading-[1.55]">
+              The operating system for modern aesthetics clinics. Clinical, compliant, and beautiful.
             </p>
+          </div>
 
-            <div className="mt-8 flex items-center gap-3">
-              {[
-                { Icon: Instagram, label: "Instagram" },
-                { Icon: Facebook, label: "Facebook" },
-                { Icon: Linkedin, label: "LinkedIn" },
-              ].map(({ Icon, label }) => (
+          {COLS.map((c) => (
+            <div key={c.title}>
+              <h6 className="font-mono text-[10.5px] tracking-[0.1em] uppercase text-[#6f6c64] font-medium mb-4">
+                {c.title}
+              </h6>
+              {c.links.map(([label, href]) => (
                 <a
                   key={label}
-                  href="#"
-                  aria-label={label}
-                  className="grid place-items-center h-10 w-10 rounded-full border border-white/15 text-white/70 hover:text-white hover:border-white/40 transition-colors"
+                  href={href}
+                  className="block text-[14px] py-[6px] text-[var(--color-soft)] hover:text-[#fafaf8] transition-colors"
                 >
-                  <Icon size={16} />
+                  {label}
                 </a>
               ))}
             </div>
-          </div>
-
-          <div className="lg:col-span-8 grid grid-cols-2 md:grid-cols-4 gap-8">
-            <FooterCol title="Product">
-              {productSlugs.map((slug) => {
-                const f = FEATURE_BY_SLUG[slug];
-                if (!f) return null;
-                return (
-                  <FooterLink key={slug} href={`/features/${slug}`}>
-                    {f.name}
-                  </FooterLink>
-                );
-              })}
-              <FooterLink href="/features">All features</FooterLink>
-            </FooterCol>
-
-            <FooterCol title="Specialties">
-              {specialtySlugs.map((slug) => {
-                const p = PRACTICES.find((x) => x.slug === slug);
-                if (!p) return null;
-                return (
-                  <FooterLink key={slug} href={`/who-we-re-for/${slug}`}>
-                    {p.name}
-                  </FooterLink>
-                );
-              })}
-              <FooterLink href="/who-we-re-for">All specialties</FooterLink>
-            </FooterCol>
-
-            <FooterCol title="Discover">
-              <FooterLink href="/why-us/success-stories">Success stories</FooterLink>
-              <FooterLink href="/resources/blog">Blog</FooterLink>
-              <FooterLink href="/resources">Guides & templates</FooterLink>
-              <FooterLink href="/resources/help">Help center</FooterLink>
-              <FooterLink href="/why-us/onboarding">Migration</FooterLink>
-              <FooterLink href="/resources/changelog">Changelog</FooterLink>
-            </FooterCol>
-
-            <FooterCol title="Company">
-              <FooterLink href="/why-us/about">About</FooterLink>
-              <FooterLink href="/why-us/careers">Careers</FooterLink>
-              <FooterLink href="/why-us/security">Security</FooterLink>
-              <FooterLink href="/why-us/hipaa">HIPAA</FooterLink>
-              <FooterLink href="/why-us/gdpr">GDPR</FooterLink>
-              <FooterLink href="/pricing">Pricing</FooterLink>
-              <FooterLink href="/demo">Book a demo</FooterLink>
-            </FooterCol>
-          </div>
+          ))}
         </div>
 
-        <div className="mt-16 pt-8 border-t border-white/10 flex flex-col md:flex-row md:items-center md:justify-between gap-4 text-xs text-white/55">
-          <p>© {new Date().getFullYear()} Reuvy. All rights reserved.</p>
-          <div className="flex flex-wrap gap-x-6 gap-y-2">
-            <Link href="/why-us/gdpr" className="hover:text-white">GDPR</Link>
-            <Link href="/why-us/hipaa" className="hover:text-white">HIPAA</Link>
-            <Link href="/why-us/terms" className="hover:text-white">Terms</Link>
-            <Link href="/why-us/privacy" className="hover:text-white">Privacy</Link>
-            <Link href="/why-us/cookies" className="hover:text-white">Cookies</Link>
-          </div>
+        <div className="flex flex-wrap items-center justify-between gap-5 pt-7 text-[13px]">
+          <span>© {new Date().getFullYear()} Ruevii Pty Ltd · ABN 00 000 000 000</span>
+          <span className="font-mono text-[12px] flex items-center gap-[9px]">
+            <span aria-hidden className="w-[22px] h-[14px] rounded-[2px] bg-[var(--color-blue)]" />
+            Designed &amp; hosted in Australia
+          </span>
+          <span className="flex gap-[22px]">
+            <a href="#" className="hover:text-[#fafaf8] transition-colors">Privacy</a>
+            <a href="#" className="hover:text-[#fafaf8] transition-colors">Terms</a>
+            <a href="#" className="hover:text-[#fafaf8] transition-colors">Status</a>
+          </span>
         </div>
       </div>
     </footer>
-  );
-}
-
-function FooterCol({ title, children }: { title: string; children: React.ReactNode }) {
-  return (
-    <div>
-      <h4 className="font-sans text-xs uppercase tracking-[0.18em] text-white/55">{title}</h4>
-      <ul className="mt-5 space-y-3">{children}</ul>
-    </div>
-  );
-}
-
-function FooterLink({ href, children }: { href: string; children: React.ReactNode }) {
-  return (
-    <li>
-      <Link href={href} className="text-sm text-white/80 hover:text-white transition-colors">
-        {children}
-      </Link>
-    </li>
   );
 }

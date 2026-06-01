@@ -1,23 +1,32 @@
 import type { Metadata } from "next";
+import { Geist_Mono } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
 
+const geistMono = Geist_Mono({
+  subsets: ["latin"],
+  variable: "--font-geist-mono",
+  weight: ["400", "500"],
+  display: "swap",
+});
+
 export const metadata: Metadata = {
-  title: "Reuvy — The only software your practice will ever need",
+  title: "Ruevii — The operating system for modern aesthetics clinics",
   description:
-    "Reuvy unifies clinical care, scheduling, payments, and patient engagement in one quietly powerful platform built for modern practices.",
-  metadataBase: new URL("https://reuvy.com"),
+    "Ruevii brings clinical records, AHPRA-compliant consults, bookings, payments and inventory into one calm, beautiful workspace — built natively for Australian injectable & cosmetic clinics.",
+  metadataBase: new URL("https://ruevii.com"),
   openGraph: {
-    title: "Reuvy — Practice software, considered.",
+    title: "Ruevii — The operating system for modern aesthetics clinics",
     description:
-      "Calendar, EMR, payments, marketing, AI — one calm system for the whole practice.",
+      "Calm, compliant, beautiful. Built for Australian aesthetics practice.",
     type: "website",
+    locale: "en_AU",
   },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en-AU" className={geistMono.variable}>
       <body className="min-h-screen antialiased">
         <Script src="/cleanup-sw.js" strategy="beforeInteractive" />
         {children}
