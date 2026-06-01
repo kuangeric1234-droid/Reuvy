@@ -5,6 +5,9 @@ import { ReactNode } from "react";
 
 const EASE = [0.21, 0.61, 0.27, 1] as const;
 
+const fmtCents = (c: number) =>
+  `$${(c / 100).toLocaleString("en-AU", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+
 export function Features() {
   return (
     <section id="features" className="wrap section">
@@ -223,16 +226,24 @@ function ClientCard() {
     <Card className="p-5">
       <div className="flex gap-[14px] items-center pb-4 border-b border-[var(--color-greige)]">
         <div className="w-[52px] h-[52px] rounded-lg bg-[var(--color-greige)] flex-none" />
-        <div className="flex-1">
-          <div className="text-[17px] font-semibold">Mia Albescu</div>
-          <div className="font-mono text-[12.5px] text-[var(--color-charcoal)] mt-[3px]">
-            PT-10428 · F · 34 · last seen 14 days ago
+        <div className="flex-1 min-w-0">
+          <div className="font-mono text-[11px] text-[var(--color-charcoal)] tracking-wide">
+            DEMO-001
+          </div>
+          <div className="text-[17px] font-semibold mt-[2px]">Mia Albescu</div>
+          <div className="font-mono text-[11.5px] text-[var(--color-charcoal)] mt-[3px]">
+            FEMALE · VIC · last_treatment_at 14d ago
           </div>
         </div>
-        <span className="font-mono text-[10.5px] tracking-[0.04em] rounded-full px-[10px] py-1 border border-[var(--color-greige)] inline-flex items-center gap-[6px] text-[var(--color-charcoal)]">
-          <span className="w-[6px] h-[6px] rounded-full bg-[#6fae8a]" />
-          Consent current
-        </span>
+        <div className="flex flex-col items-end gap-1">
+          <span className="font-mono text-[10px] uppercase tracking-[0.06em] rounded-full px-[9px] py-[2px] border border-[var(--color-greige)] inline-flex items-center gap-[6px] text-[var(--color-charcoal)] bg-white">
+            <span className="w-[6px] h-[6px] rounded-full bg-[#6fae8a]" />
+            ACTIVE
+          </span>
+          <span className="font-mono text-[10px] uppercase tracking-[0.06em] rounded-full px-[9px] py-[2px] border border-[color-mix(in_srgb,var(--color-blue)_55%,white)] bg-[#f1f5f9] text-[var(--color-blue-ink)]">
+            SKIN
+          </span>
+        </div>
       </div>
 
       <div className="grid grid-cols-2 gap-[10px] mt-4">
@@ -254,13 +265,13 @@ function ClientCard() {
 
       <div className="mt-[18px] flex flex-col">
         {[
-          ["09 APR", "Anti-wrinkle — upper face", "22u · botulinum toxin · Dr. Lane"],
-          ["12 MAR", "Initial consultation", "Treatment plan agreed · consent signed"],
-          ["12 MAR", "Skin assessment + photos", "Baseline photo set captured"],
-        ].map(([when, title, sub], i) => (
+          ["09 APR", "Anti-wrinkle — upper face", "22u · botulinum toxin", "DR LANE"],
+          ["12 MAR", "Initial consultation", "Treatment plan agreed · consent signed", "DR LANE"],
+          ["12 MAR", "Skin assessment + photos", "Baseline photo set captured", "RN PARK"],
+        ].map(([when, title, sub, author], i) => (
           <div
             key={i}
-            className={`grid grid-cols-[64px_1fr] gap-3 py-[11px] text-[13px] ${
+            className={`grid grid-cols-[64px_1fr_auto] gap-3 py-[11px] text-[13px] items-start ${
               i === 0 ? "" : "border-t border-[var(--color-greige)]"
             }`}
           >
@@ -268,6 +279,9 @@ function ClientCard() {
             <span>
               <b className="font-semibold">{title}</b>
               <p className="text-[var(--color-charcoal)] text-[12.5px] mt-[2px]">{sub}</p>
+            </span>
+            <span className="font-mono text-[10px] text-[var(--color-blue-ink)] tracking-wide self-start">
+              {author}
             </span>
           </div>
         ))}
@@ -277,14 +291,23 @@ function ClientCard() {
 }
 
 function CalendarMock() {
-  type Block = { row: number; col: number; label: string; time: string; b?: boolean };
+  // appointments.status is lowercase per schema; appointments hang off resources (e.g. "DR LANE").
+  type Block = {
+    row: number;
+    col: number;
+    title: string;
+    time: string;
+    status: "confirmed" | "completed" | "pending";
+    res: string;
+    b?: boolean;
+  };
   const blocks: Block[] = [
-    { row: 0, col: 0, time: "09:00", label: "M. Albescu", b: true },
-    { row: 0, col: 2, time: "09:30", label: "J. Okafor" },
-    { row: 1, col: 1, time: "10:30", label: "P. Nadar" },
-    { row: 1, col: 3, time: "10:00", label: "Video consult", b: true },
-    { row: 2, col: 0, time: "11:15", label: "H. Tan" },
-    { row: 2, col: 2, time: "11:00", label: "L. Greer" },
+    { row: 0, col: 0, time: "09:00", title: "Anti-wrinkle review", status: "confirmed", res: "DR LANE", b: true },
+    { row: 0, col: 2, time: "09:30", title: "Initial consult", status: "confirmed", res: "DR LANE" },
+    { row: 1, col: 1, time: "10:30", title: "Lip filler 1.0ml", status: "completed", res: "DR LANE" },
+    { row: 1, col: 3, time: "10:00", title: "Video consult", status: "confirmed", res: "DR LANE", b: true },
+    { row: 2, col: 0, time: "11:15", title: "Skin needling", status: "confirmed", res: "RN PARK" },
+    { row: 2, col: 2, time: "11:00", title: "Hydrafacial", status: "pending", res: "RN PARK" },
   ];
   return (
     <Card className="p-4">
@@ -329,7 +352,14 @@ function RowCells({
   times,
 }: {
   row: number;
-  blocks: { col: number; time: string; label: string; b?: boolean }[];
+  blocks: {
+    col: number;
+    time: string;
+    title: string;
+    status: "confirmed" | "completed" | "pending";
+    res: string;
+    b?: boolean;
+  }[];
   times: string;
 }) {
   return (
@@ -354,8 +384,16 @@ function RowCells({
                 className="text-[10.5px] rounded-[5px] px-[7px] py-[5px] bg-white border border-[var(--color-greige)] leading-[1.25]"
                 style={{ borderLeft: `3px solid ${block.b ? "var(--color-blue)" : "var(--color-charcoal)"}` }}
               >
-                <span className="block font-mono text-[9px] text-[var(--color-charcoal)]">{block.time}</span>
-                {block.label}
+                <div className="flex items-baseline justify-between gap-1">
+                  <span className="font-mono text-[9px] text-[var(--color-charcoal)]">{block.time}</span>
+                  <span className="font-mono text-[8.5px] text-[var(--color-blue-ink)] tracking-wide">
+                    {block.res}
+                  </span>
+                </div>
+                <span className="block truncate">{block.title}</span>
+                <span className="block font-mono text-[8.5px] lowercase text-[var(--color-charcoal)] mt-[1px]">
+                  {block.status}
+                </span>
               </motion.div>
             )}
           </div>
@@ -366,35 +404,58 @@ function RowCells({
 }
 
 function PosMock() {
+  // sale_line_items.item_type + amounts in integer cents (unit_price_cents etc.)
+  const lines: { item_type: "SERVICE" | "PRODUCT" | "CREDIT_ADJUSTMENT"; item_name: string; amount_cents: number }[] = [
+    { item_type: "SERVICE", item_name: "Anti-wrinkle — upper face (22u)", amount_cents: 39600 },
+    { item_type: "PRODUCT", item_name: "Vitamin skin booster", amount_cents: 18000 },
+    { item_type: "CREDIT_ADJUSTMENT", item_name: "Glow membership credit", amount_cents: -5000 },
+  ];
+
   return (
     <Card className="p-[18px]">
-      <h5 className="font-sans text-[13px] uppercase tracking-[0.08em] text-[var(--color-charcoal)] font-semibold mb-[14px] m-0">
-        Checkout · Mia Albescu
-      </h5>
+      <div className="flex items-baseline justify-between mb-[14px]">
+        <h5 className="font-sans text-[13px] uppercase tracking-[0.08em] text-[var(--color-charcoal)] font-semibold m-0">
+          Checkout · Mia Albescu
+        </h5>
+        <span className="font-mono text-[11px] text-[var(--color-charcoal)] tracking-wide">
+          S-10428
+        </span>
+      </div>
       <motion.div
         initial="hidden"
         whileInView="show"
         viewport={{ once: true, margin: "-60px" }}
         variants={{ hidden: {}, show: { transition: { staggerChildren: 0.06, delayChildren: 0.15 } } }}
       >
-        {[
-          ["Anti-wrinkle — upper face (22u)", "$396.00"],
-          ["Vitamin skin booster", "$180.00"],
-          ["Glow membership credit", "−$50.00"],
-        ].map(([nm, amt], i) => (
+        {lines.map((l, i) => (
           <motion.div
-            key={nm}
+            key={l.item_name}
             variants={{ hidden: { opacity: 0, x: -6 }, show: { opacity: 1, x: 0, transition: { duration: 0.45, ease: [0.21, 0.61, 0.27, 1] } } }}
-            className={`flex justify-between py-[11px] text-[14px] ${i === 0 ? "" : "border-t border-[var(--color-greige)]"}`}
+            className={`flex justify-between gap-3 py-[11px] text-[14px] ${i === 0 ? "" : "border-t border-[var(--color-greige)]"}`}
           >
-            <span className="text-[var(--color-charcoal)]">{nm}</span>
-            <span className="font-mono">{amt}</span>
+            <span className="flex-1 min-w-0">
+              <span className="block font-mono text-[9.5px] uppercase tracking-[0.08em] text-[var(--color-blue-ink)]">
+                {l.item_type}
+              </span>
+              <span className="block text-[var(--color-charcoal)]">{l.item_name}</span>
+            </span>
+            <span className="font-mono shrink-0">
+              {l.amount_cents < 0 ? `−${fmtCents(Math.abs(l.amount_cents))}` : fmtCents(l.amount_cents)}
+            </span>
           </motion.div>
         ))}
       </motion.div>
       <div className="flex justify-between font-semibold py-[14px] border-t-[1.5px] border-black mt-1">
         <span>Total due</span>
-        <span className="font-mono text-[17px]">$526.00</span>
+        <span className="font-mono text-[17px]">{fmtCents(52600)}</span>
+      </div>
+      <div className="mt-2 flex items-center gap-2">
+        <span className="font-mono text-[10px] uppercase tracking-[0.06em] px-2 py-[2px] rounded-full bg-black text-white">
+          COMPLETED
+        </span>
+        <span className="font-mono text-[10px] text-[var(--color-charcoal)] tracking-wide">
+          EFT_POS
+        </span>
       </div>
       <div className="mt-4 grid grid-cols-2 gap-2">
         <button className="text-[13.5px] font-medium leading-none px-3 py-[11px] rounded-md bg-black text-white hover:bg-[#1c1c1b] active:translate-y-px transition-colors">
@@ -405,18 +466,27 @@ function PosMock() {
         </button>
       </div>
       <div className="mt-3 font-mono text-[12px] text-[var(--color-charcoal)] flex gap-2 items-center">
-        ⟳ Glow membership · $99/mo · next bill 1 Jul
+        ⟳ Glow membership · {fmtCents(9900)}/mo · MONTHLY · next bill 1 Jul
       </div>
     </Card>
   );
 }
 
 function InventoryMock() {
-  const rows: { name: string; sku: string; qty: string; status: "s4" | "low" | "ok"; label: string }[] = [
-    { name: "Botulinum toxin 100u", sku: "SKU · BTX-100 · S4", qty: "6", status: "s4", label: "S4 register" },
-    { name: "HA filler — lips 1.0ml", sku: "SKU · HAF-L10", qty: "3", status: "low", label: "Reorder" },
-    { name: "Skin booster vials", sku: "SKU · SB-VIT", qty: "21", status: "ok", label: "In stock" },
-    { name: "Numbing cream 30g", sku: "SKU · NUM-30", qty: "14", status: "ok", label: "In stock" },
+  // products: short_code + category (ProductCategory enum)
+  const rows: {
+    name: string;
+    short_code: string;
+    category: "SKINCARE" | "MASK" | "OTHER";
+    qty: string;
+    status: "s4" | "low" | "ok";
+    label: string;
+    flag: string;
+  }[] = [
+    { name: "Botulinum toxin 100u", short_code: "BTX-100", category: "OTHER", qty: "6", status: "s4", label: "S4 register", flag: "s4_controlled" },
+    { name: "HA filler — lips 1.0ml", short_code: "HAF-L10", category: "OTHER", qty: "3", status: "low", label: "Reorder", flag: "below_reorder_point" },
+    { name: "Skin booster vials", short_code: "SB-VIT", category: "SKINCARE", qty: "21", status: "ok", label: "In stock", flag: "in_stock" },
+    { name: "Numbing cream 30g", short_code: "NUM-30", category: "SKINCARE", qty: "14", status: "ok", label: "In stock", flag: "in_stock" },
   ];
 
   const statusClass = {
@@ -445,7 +515,7 @@ function InventoryMock() {
         <tbody>
           {rows.map((r, i) => (
             <motion.tr
-              key={r.sku}
+              key={r.short_code}
               initial={{ opacity: 0, y: 6 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-40px" }}
@@ -453,7 +523,9 @@ function InventoryMock() {
             >
               <td className={`py-[13px] px-[18px] ${i === rows.length - 1 ? "" : "border-b border-[var(--color-greige)]"}`}>
                 <div className="font-medium">{r.name}</div>
-                <div className="font-mono text-[11px] text-[var(--color-charcoal)]">{r.sku}</div>
+                <div className="font-mono text-[11px] text-[var(--color-charcoal)] tracking-wide">
+                  {r.short_code} · {r.category}
+                </div>
               </td>
               <td
                 className={`py-[13px] px-[18px] text-right font-mono ${i === rows.length - 1 ? "" : "border-b border-[var(--color-greige)]"}`}
@@ -463,9 +535,14 @@ function InventoryMock() {
               <td
                 className={`py-[13px] px-[18px] text-right ${i === rows.length - 1 ? "" : "border-b border-[var(--color-greige)]"}`}
               >
-                <span className={`font-mono text-[10.5px] px-[9px] py-[3px] rounded-full border ${statusClass[r.status]}`}>
-                  {r.label}
-                </span>
+                <div className="inline-flex flex-col items-end gap-[3px]">
+                  <span className={`font-mono text-[10.5px] px-[9px] py-[3px] rounded-full border ${statusClass[r.status]}`}>
+                    {r.label}
+                  </span>
+                  <span className="font-mono text-[9px] lowercase text-[var(--color-charcoal)] tracking-wide">
+                    {r.flag}
+                  </span>
+                </div>
               </td>
             </motion.tr>
           ))}

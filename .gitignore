@@ -8,3 +8,10 @@ build
 *.log
 .vercel
 next-env.d.ts
+
+# Playwright + debug screenshots
+.playwright-mcp/
+/*.png
+
+# Next/TS incremental build caches
+tsconfig.tsbuildinfo
