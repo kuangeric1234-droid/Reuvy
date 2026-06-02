@@ -49,7 +49,7 @@ const NAV_LINKS: { label: string; key: DropdownKey; href?: string }[] = [
   { label: "Who we're for", key: "who" },
   { label: "Why us", key: "why" },
   { label: "Resources", key: "resources" },
-  { label: "Pricing", key: null, href: "#pricing" },
+  { label: "Pricing", key: null, href: "/pricing" },
 ];
 
 /* ---------- Who we serve (AU-only segments) ---------- */
@@ -71,99 +71,99 @@ const WHO_NAV_GROUPS: WhoNavGroup[] = SEGMENT_GROUPS.map((g) => ({
 }));
 
 /* ---------- Why us (AHPRA-flavoured) ---------- */
-type WhyItem = { name: string; icon: LucideIcon; hint?: string };
+type WhyItem = { name: string; icon: LucideIcon; hint?: string; href: string };
 type WhyColumn = { title: string; items: WhyItem[] };
 
 const WHY_COLUMNS: WhyColumn[] = [
   {
     title: "Compare & value",
     items: [
-      { name: "Customer stories", icon: Trophy, hint: "AU clinics that switched" },
-      { name: "Compare Ruevii", icon: ArrowLeftRight, hint: "Pabau · Cliniko · Powerdiary" },
-      { name: "Savings calculator", icon: Calculator, hint: "Time + revenue gains" },
+      { name: "Customer stories", icon: Trophy, hint: "AU clinics that switched", href: "/resources/blog" },
+      { name: "Compare Ruevii", icon: ArrowLeftRight, hint: "Pabau · Cliniko · Powerdiary", href: "/compare" },
+      { name: "Savings calculator", icon: Calculator, hint: "Time + revenue gains", href: "/pricing" },
     ],
   },
   {
     title: "AHPRA & compliance",
     items: [
-      { name: "AHPRA-native by design", icon: Flag, hint: "Built for AU regulation" },
-      { name: "S4 drug register", icon: Syringe, hint: "In-app dispensing log" },
-      { name: "Consent enforcement", icon: ClipboardCheck, hint: "Block treatment until signed" },
-      { name: "Immutable audit trail", icon: FileCheck, hint: "Every action, append-only" },
-      { name: "HIPAA-aligned", icon: ShieldCheck, hint: "PHI-grade encryption" },
+      { name: "AHPRA-native by design", icon: Flag, hint: "Built for AU regulation", href: "/compliance" },
+      { name: "S4 drug register", icon: Syringe, hint: "In-app dispensing log", href: "/compliance" },
+      { name: "Consent enforcement", icon: ClipboardCheck, hint: "Block treatment until signed", href: "/compliance" },
+      { name: "Immutable audit trail", icon: FileCheck, hint: "Every action, append-only", href: "/compliance" },
+      { name: "HIPAA-aligned", icon: ShieldCheck, hint: "PHI-grade encryption", href: "/security" },
     ],
   },
   {
     title: "Implementation & support",
     items: [
-      { name: "Data migration", icon: Database, hint: "We move it for you" },
-      { name: "On-site training", icon: GraduationCap, hint: "We come to your clinic" },
-      { name: "AU onboarding crew", icon: Headphones, hint: "Sydney-based, your timezone" },
-      { name: "Named account manager", icon: UserCheck, hint: "One human, every quarter" },
-      { name: "Switch from Pabau", icon: ArrowLeftRight, hint: "Step-by-step migration" },
+      { name: "Data migration", icon: Database, hint: "We move it for you", href: "/switch-from-pabau" },
+      { name: "On-site training", icon: GraduationCap, hint: "We come to your clinic", href: "/about" },
+      { name: "AU onboarding crew", icon: Headphones, hint: "Sydney-based, your timezone", href: "/about" },
+      { name: "Named account manager", icon: UserCheck, hint: "One human, every quarter", href: "/about" },
+      { name: "Switch from Pabau", icon: ArrowLeftRight, hint: "Step-by-step migration", href: "/switch-from-pabau" },
     ],
   },
   {
     title: "Company",
     items: [
-      { name: "About Ruevii", icon: Sparkles },
-      { name: "Sydney HQ", icon: MapPin, hint: "AU data residency" },
-      { name: "Careers", icon: Briefcase, hint: "We're hiring in AU" },
-      { name: "Roadmap", icon: ScrollText, hint: "What's shipping next" },
-      { name: "Status", icon: Activity, hint: "Uptime & incidents" },
+      { name: "About Ruevii", icon: Sparkles, href: "/about" },
+      { name: "Sydney HQ", icon: MapPin, hint: "AU data residency", href: "/about" },
+      { name: "Careers", icon: Briefcase, hint: "We're hiring in AU", href: "/about" },
+      { name: "Roadmap", icon: ScrollText, hint: "What's shipping next", href: "/roadmap" },
+      { name: "Status", icon: Activity, hint: "Uptime & incidents", href: "/status" },
     ],
   },
 ];
 
 /* ---------- Resources ---------- */
-type ResourceLink = { name: string; icon: LucideIcon };
+type ResourceLink = { name: string; icon: LucideIcon; href: string };
 type ResourceColumn = { title: string; items: ResourceLink[] };
 
 const RESOURCE_COLUMNS: ResourceColumn[] = [
   {
     title: "Guides & tools",
     items: [
-      { name: "AU Aesthetics Playbook", icon: ScrollText },
-      { name: "AHPRA consent templates", icon: ClipboardCheck },
-      { name: "Treatment record templates", icon: FileCheck },
-      { name: "Pricing strategy guide", icon: Calculator },
-      { name: "Migration checklist", icon: ArrowLeftRight },
+      { name: "AU Aesthetics Playbook", icon: ScrollText, href: "/resources" },
+      { name: "AHPRA consent templates", icon: ClipboardCheck, href: "/compliance" },
+      { name: "Treatment record templates", icon: FileCheck, href: "/resources" },
+      { name: "Pricing strategy guide", icon: Calculator, href: "/resources/blog/pricing-memberships-aud" },
+      { name: "Migration checklist", icon: ArrowLeftRight, href: "/switch-from-pabau" },
     ],
   },
   {
     title: "Education",
     items: [
-      { name: "Blog", icon: ScrollText },
-      { name: "Ruevii Academy", icon: GraduationCap },
-      { name: "Knowledge base", icon: Database },
-      { name: "Product updates", icon: Sparkles },
-      { name: "Webinars", icon: Users },
+      { name: "Blog", icon: ScrollText, href: "/resources/blog" },
+      { name: "Ruevii Academy", icon: GraduationCap, href: "/resources" },
+      { name: "Knowledge base", icon: Database, href: "/resources/help" },
+      { name: "Product updates", icon: Sparkles, href: "/roadmap" },
+      { name: "Webinars", icon: Users, href: "/resources" },
     ],
   },
   {
     title: "Referrals",
     items: [
-      { name: "Refer-a-friend", icon: Users },
-      { name: "Build with Ruevii", icon: ScrollText },
-      { name: "Become a partner", icon: Award },
+      { name: "Refer-a-friend", icon: Users, href: "/resources" },
+      { name: "Build with Ruevii", icon: ScrollText, href: "/developers" },
+      { name: "Become a partner", icon: Award, href: "/resources" },
     ],
   },
   {
     title: "Support",
     items: [
-      { name: "Visit support centre", icon: Headphones },
-      { name: "System status", icon: Activity },
-      { name: "Contact sales", icon: UserCheck },
+      { name: "Visit support centre", icon: Headphones, href: "/resources/help" },
+      { name: "System status", icon: Activity, href: "/status" },
+      { name: "Contact sales", icon: UserCheck, href: "/demo" },
     ],
   },
 ];
 
-type PopularResource = { title: string; kind: "Ebook" | "Template" | "Guide"; accent: string };
+type PopularResource = { title: string; kind: "Ebook" | "Template" | "Guide"; accent: string; href: string };
 const POPULAR_RESOURCES: PopularResource[] = [
-  { title: "AU Cosmetic Trends 2026", kind: "Ebook", accent: "from-[var(--color-blue)]/35" },
-  { title: "Med Spa Business Guide", kind: "Ebook", accent: "from-[var(--color-blue)]/25" },
-  { title: "AHPRA Consent Template", kind: "Template", accent: "from-[var(--color-blue)]/20" },
-  { title: "S4 Register Template", kind: "Template", accent: "from-[var(--color-blue)]/30" },
+  { title: "AU Cosmetic Trends 2026", kind: "Ebook", accent: "from-[var(--color-blue)]/35", href: "/resources/blog/ahpra-cosmetic-rules-2026" },
+  { title: "Med Spa Business Guide", kind: "Ebook", accent: "from-[var(--color-blue)]/25", href: "/resources/blog" },
+  { title: "AHPRA Consent Template", kind: "Template", accent: "from-[var(--color-blue)]/20", href: "/compliance" },
+  { title: "S4 Register Template", kind: "Template", accent: "from-[var(--color-blue)]/30", href: "/compliance" },
 ];
 
 const PANEL_EASE = [0.21, 0.61, 0.27, 1] as const;
@@ -758,6 +758,7 @@ function WhoPanel({
 /* ---------- Why us Mega Panel (AHPRA-flavoured) ---------- */
 
 function WhyPanel({
+  onClose,
   onHoverIn,
   onHoverOut,
 }: {
@@ -793,9 +794,10 @@ function WhyPanel({
                   {col.items.map((it) => {
                     const Icon = it.icon;
                     return (
-                      <a
+                      <Link
                         key={it.name}
-                        href="#"
+                        href={it.href}
+                        onClick={onClose}
                         className="group flex items-start gap-2.5 p-2 rounded-lg hover:bg-[var(--color-greige-2)] transition-colors"
                       >
                         <span className="w-8 h-8 shrink-0 rounded-md grid place-items-center bg-[color-mix(in_srgb,var(--color-blue)_15%,white)]">
@@ -811,7 +813,7 @@ function WhyPanel({
                             </span>
                           )}
                         </span>
-                      </a>
+                      </Link>
                     );
                   })}
                 </div>
@@ -879,6 +881,7 @@ function WhyPanel({
 /* ---------- Resources Mega Panel ---------- */
 
 function ResourcesPanel({
+  onClose,
   onHoverIn,
   onHoverOut,
 }: {
@@ -914,16 +917,17 @@ function ResourcesPanel({
                   {col.items.map((it) => {
                     const Icon = it.icon;
                     return (
-                      <a
+                      <Link
                         key={it.name}
-                        href="#"
+                        href={it.href}
+                        onClick={onClose}
                         className="group flex items-center gap-2.5 p-2 rounded-lg hover:bg-[var(--color-greige-2)] transition-colors"
                       >
                         <Icon size={14} className="text-[var(--color-blue-ink)] shrink-0" />
                         <span className="text-[13px] font-medium text-black leading-tight">
                           {it.name}
                         </span>
-                      </a>
+                      </Link>
                     );
                   })}
                 </div>
@@ -940,9 +944,10 @@ function ResourcesPanel({
             </p>
             <div className="grid grid-cols-2 gap-3">
               {POPULAR_RESOURCES.map((r) => (
-                <a
+                <Link
                   key={r.title}
-                  href="#"
+                  href={r.href}
+                  onClick={onClose}
                   className="group rounded-lg overflow-hidden border border-[var(--color-greige)] bg-white hover:border-[color-mix(in_srgb,var(--color-blue)_55%,white)] transition-colors"
                 >
                   <div
@@ -962,7 +967,7 @@ function ResourcesPanel({
                   <p className="px-2 py-2 text-[11.5px] font-medium text-black leading-tight">
                     {r.title}
                   </p>
-                </a>
+                </Link>
               ))}
             </div>
             <div className="mt-4 flex items-center justify-center gap-1.5">

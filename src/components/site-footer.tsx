@@ -1,41 +1,55 @@
 import Link from "next/link";
 
-const COLS = [
+const COLS: { title: string; links: [string, string][] }[] = [
   {
     title: "Product",
     links: [
-      ["Clinical records", "#features"],
-      ["Scheduling", "#features"],
-      ["Payments & POS", "#features"],
-      ["Inventory", "#features"],
-      ["Ruevii AI", "#ai"],
+      ["Clinical records", "/features/clients-emr"],
+      ["Scheduling", "/features/calendar"],
+      ["Payments & POS", "/features/payments-pos"],
+      ["Inventory", "/features/inventory"],
+      ["Ruevii AI", "/features/ruevii-ai"],
+      ["All features", "/#features"],
     ],
   },
   {
     title: "Solutions",
     links: [
-      ["Injectable clinics", "#"],
-      ["Cosmetic & skin", "#"],
-      ["Multi-site groups", "#"],
-      ["Nurses & injectors", "#"],
+      ["Cosmetic & injectable", "/who-we-serve/cosmetic-injectables"],
+      ["Skin & laser", "/who-we-serve/skin-and-laser"],
+      ["Solo injectors", "/who-we-serve/solo-injector"],
+      ["Single-location clinics", "/who-we-serve/single-clinic"],
+      ["Multi-location groups", "/who-we-serve/multi-location"],
     ],
   },
   {
     title: "Company",
     links: [
-      ["About", "#"],
-      ["AHPRA compliance", "#compliance"],
-      ["Pricing", "#pricing"],
-      ["Contact", "#"],
+      ["About", "/about"],
+      ["AHPRA compliance", "/compliance"],
+      ["Compare Ruevii", "/compare"],
+      ["Switch from Pabau", "/switch-from-pabau"],
+      ["Pricing", "/pricing"],
+      ["Book a demo", "/demo"],
+    ],
+  },
+  {
+    title: "Resources",
+    links: [
+      ["Blog", "/resources/blog"],
+      ["Help centre", "/resources/help"],
+      ["Developers", "/developers"],
+      ["Roadmap", "/roadmap"],
+      ["Status", "/status"],
     ],
   },
   {
     title: "Legal",
     links: [
-      ["Privacy", "#"],
-      ["Terms", "#"],
-      ["Security", "#"],
-      ["Data residency", "#"],
+      ["Privacy", "/privacy"],
+      ["Terms", "/terms"],
+      ["Security", "/security"],
+      ["Data residency", "/security#data-residency"],
     ],
   },
 ];
@@ -44,16 +58,23 @@ export function SiteFooter() {
   return (
     <footer className="bg-[var(--color-ink)] text-[var(--color-soft)] pt-20 pb-10">
       <div className="wrap">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:[grid-template-columns:1.6fr_repeat(4,1fr)] gap-10 pb-14 border-b border-[#2c2c29]">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:[grid-template-columns:1.4fr_repeat(5,1fr)] gap-10 pb-14 border-b border-[#2c2c29]">
           <div>
-            <Link href="/" className="flex items-center gap-[9px] font-serif text-[25px] tracking-[-0.02em] text-[#fafaf8] mb-[18px]">
-              <span aria-hidden className="relative w-[22px] h-[22px] rounded-[5px] bg-[#fafaf8] grid place-items-center">
+            <Link
+              href="/"
+              className="flex items-center gap-[9px] font-serif text-[25px] tracking-[-0.02em] text-[#fafaf8] mb-[18px]"
+            >
+              <span
+                aria-hidden
+                className="relative w-[22px] h-[22px] rounded-[5px] bg-[#fafaf8] grid place-items-center"
+              >
                 <span className="w-2 h-2 rounded-full bg-[var(--color-ink)]" />
               </span>
               Ruevii
             </Link>
             <p className="text-[14px] max-w-[30ch] leading-[1.55]">
-              The operating system for modern aesthetics clinics. Clinical, compliant, and beautiful.
+              The operating system for modern Australian aesthetics clinics.
+              Clinical, compliant and quietly beautiful.
             </p>
           </div>
 
@@ -63,13 +84,13 @@ export function SiteFooter() {
                 {c.title}
               </h6>
               {c.links.map(([label, href]) => (
-                <a
+                <Link
                   key={label}
                   href={href}
                   className="block text-[14px] py-[6px] text-[var(--color-soft)] hover:text-[#fafaf8] transition-colors"
                 >
                   {label}
-                </a>
+                </Link>
               ))}
             </div>
           ))}
@@ -78,13 +99,22 @@ export function SiteFooter() {
         <div className="flex flex-wrap items-center justify-between gap-5 pt-7 text-[13px]">
           <span>© {new Date().getFullYear()} Ruevii Pty Ltd · ABN 00 000 000 000</span>
           <span className="font-mono text-[12px] flex items-center gap-[9px]">
-            <span aria-hidden className="w-[22px] h-[14px] rounded-[2px] bg-[var(--color-blue)]" />
+            <span
+              aria-hidden
+              className="w-[22px] h-[14px] rounded-[2px] bg-[var(--color-blue)]"
+            />
             Designed &amp; hosted in Australia
           </span>
           <span className="flex gap-[22px]">
-            <a href="#" className="hover:text-[#fafaf8] transition-colors">Privacy</a>
-            <a href="#" className="hover:text-[#fafaf8] transition-colors">Terms</a>
-            <a href="#" className="hover:text-[#fafaf8] transition-colors">Status</a>
+            <Link href="/privacy" className="hover:text-[#fafaf8] transition-colors">
+              Privacy
+            </Link>
+            <Link href="/terms" className="hover:text-[#fafaf8] transition-colors">
+              Terms
+            </Link>
+            <Link href="/status" className="hover:text-[#fafaf8] transition-colors">
+              Status
+            </Link>
           </span>
         </div>
       </div>
