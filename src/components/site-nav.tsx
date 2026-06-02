@@ -293,7 +293,7 @@ export function SiteNav() {
         {/* RIGHT: CTAs */}
         <div className="ml-auto hidden lg:flex items-center gap-1.5">
           <a
-            href="#"
+            href="https://app.ruevii.com"
             className="text-[15px] px-4 py-[13px] text-black hover:opacity-60 transition-opacity"
           >
             Log in
@@ -368,7 +368,7 @@ export function SiteNav() {
             ))}
             <div className="flex gap-2 pt-4 mt-2 border-t border-[var(--color-greige)]">
               <a
-                href="#"
+                href="https://app.ruevii.com"
                 onClick={() => setMobile(false)}
                 className="flex-1 text-center text-[14px] py-3 rounded-md border border-[var(--color-greige)] bg-white"
               >
