@@ -5,7 +5,7 @@ import { SiteNav } from "@/components/site-nav";
 import { SiteFooter } from "@/components/site-footer";
 import { ScrollProgress } from "@/components/scroll-progress";
 import { ClosingCTABand } from "@/components/ui";
-import { POSTS, POST_BY_SLUG, getRelatedPosts } from "@/lib/marketing/posts";
+import { getAllPosts, getPostBySlug, getRelatedPosts } from "@/lib/marketing/blog-source";
 
 import { PostContent } from "./post-content";
 
@@ -13,8 +13,12 @@ import { PostContent } from "./post-content";
 /*  Static params + per-post metadata                                          */
 /* -------------------------------------------------------------------------- */
 
-export function generateStaticParams() {
-  return POSTS.map((post) => ({ slug: post.slug }));
+// Re-checks Sanity (when configured) every 60s so new posts appear without a deploy.
+export const revalidate = 60;
+
+export async function generateStaticParams() {
+  const posts = await getAllPosts();
+  return posts.map((post) => ({ slug: post.slug }));
 }
 
 type RouteParams = { slug: string };
@@ -25,7 +29,7 @@ export async function generateMetadata({
   params: Promise<RouteParams>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const post = POST_BY_SLUG[slug];
+  const post = await getPostBySlug(slug);
 
   if (!post) {
     return {
@@ -64,13 +68,13 @@ export default async function BlogPostPage({
   params: Promise<RouteParams>;
 }) {
   const { slug } = await params;
-  const post = POST_BY_SLUG[slug];
+  const post = await getPostBySlug(slug);
 
   if (!post) {
     notFound();
   }
 
-  const related = getRelatedPosts(slug, 3);
+  const related = await getRelatedPosts(slug, 3);
 
   return (
     <main className="min-h-screen bg-[var(--color-paper)]">

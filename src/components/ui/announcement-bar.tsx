@@ -1,4 +1,7 @@
+"use client";
+
 import type { ReactNode } from "react";
+import { usePathname } from "next/navigation";
 
 type AnnouncementBarProps = {
   children: ReactNode;
@@ -16,6 +19,10 @@ export function AnnouncementBar({
   href,
   linkLabel = "Read more",
 }: AnnouncementBarProps) {
+  const pathname = usePathname();
+  // The embedded Sanity Studio owns the full viewport — no marketing chrome.
+  if (pathname?.startsWith("/studio")) return null;
+
   return (
     <div
       role="region"

@@ -56,12 +56,13 @@ export function Hero() {
         <span aria-hidden className="w-[7px] h-[7px] rounded-full bg-[var(--color-blue)]" />
       </motion.div>
 
-      {/* H1 with per-word stagger */}
+      {/* H1 with per-word stagger — flex-wrap + justify-center keeps every
+          wrapped line truly centered (no trailing-margin drift). */}
       <motion.h1
         initial="hidden"
         animate="show"
         variants={{ hidden: {}, show: { transition: { staggerChildren: 0.04, delayChildren: 0.18 } } }}
-        className="text-[clamp(40px,6vw,78px)] font-normal mx-auto max-w-[16ch] tracking-[-0.025em] leading-[1.02]"
+        className="flex flex-wrap justify-center items-baseline gap-x-[0.24em] text-[clamp(40px,6vw,78px)] font-normal mx-auto max-w-[16ch] tracking-[-0.025em] leading-[1.1]"
       >
         {["The", "operating", "system", "for", "your"].map((w, i) => (
           <motion.span
@@ -70,32 +71,33 @@ export function Hero() {
               hidden: { opacity: 0, y: 18, filter: "blur(6px)" },
               show: { opacity: 1, y: 0, filter: "blur(0px)", transition: { duration: 0.55, ease: EASE } },
             }}
-            className="inline-block mr-[0.22em]"
+            className="inline-block"
           >
             {w}
           </motion.span>
         ))}
 
-        {/* Rotating last word */}
+        {/* Force the rotating word onto its own flex line so justify-center
+            truly centres it. */}
+        <span aria-hidden className="basis-full h-0" />
+
+        {/* Rotating last word — own centred line; soft fade/blur slide (no
+            overflow mask) so italic descenders are never clipped. */}
         <motion.span
           variants={{
             hidden: { opacity: 0, y: 18, filter: "blur(6px)" },
             show: { opacity: 1, y: 0, filter: "blur(0px)", transition: { duration: 0.7, ease: EASE } },
           }}
-          className="inline-flex align-baseline relative overflow-hidden"
-          style={{
-            // give the rotator enough room — sized to the longest phrase.
-            minWidth: "12ch",
-            verticalAlign: "baseline",
-          }}
+          className="relative inline-flex justify-center"
+          style={{ minWidth: "11ch" }}
         >
           <AnimatePresence mode="wait" initial={false}>
             <motion.em
               key={currentWord}
-              initial={{ opacity: 0, y: "0.6em", filter: "blur(4px)" }}
+              initial={{ opacity: 0, y: "0.24em", filter: "blur(5px)" }}
               animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-              exit={{ opacity: 0, y: "-0.6em", filter: "blur(4px)" }}
-              transition={{ duration: 0.55, ease: EASE }}
+              exit={{ opacity: 0, y: "-0.24em", filter: "blur(5px)" }}
+              transition={{ duration: 0.5, ease: EASE }}
               className="inline-block whitespace-nowrap"
               style={{
                 fontStyle: "italic",
