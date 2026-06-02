@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 
 const COLS: { title: string; links: [string, string][] }[] = [
@@ -62,15 +63,16 @@ export function SiteFooter() {
           <div>
             <Link
               href="/"
-              className="flex items-center gap-[9px] font-serif text-[25px] tracking-[-0.02em] text-[#fafaf8] mb-[18px]"
+              aria-label="Ruevii — home"
+              className="flex items-center mb-[18px]"
             >
-              <span
-                aria-hidden
-                className="relative w-[22px] h-[22px] rounded-[5px] bg-[#fafaf8] grid place-items-center"
-              >
-                <span className="w-2 h-2 rounded-full bg-[var(--color-ink)]" />
-              </span>
-              Ruevii
+              <Image
+                src="/ruevii-logo-white.png"
+                alt="Ruevii"
+                width={92}
+                height={29}
+                className="h-[28px] w-auto"
+              />
             </Link>
             <p className="text-[14px] max-w-[30ch] leading-[1.55]">
               The operating system for modern Australian aesthetics clinics.

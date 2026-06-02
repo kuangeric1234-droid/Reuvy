@@ -20,6 +20,12 @@ import {
   Mail,
   Phone,
   Activity,
+  FormInput,
+  Heart,
+  Megaphone,
+  Star,
+  TrendingUp,
+  Workflow,
   type LucideIcon,
 } from "lucide-react";
 
@@ -565,6 +571,456 @@ const FEATURE_COPY: Record<string, FeatureCopy> = {
     ],
     closingPrimary: "Send the link.",
     closingSecondary: "Close the sale.",
+  },
+
+  "unified-inbox": {
+    hookSecondary: "where the front desk works.",
+    expandedBody: "The Unified Inbox is a shared SMS workspace for your front desk, where every two-way conversation sits beside the client or lead record it belongs to. Triage what's unread, assign threads to the right person, and reply with canned templates that pull merge fields straight from the patient record — no copy-paste, no missed messages.",
+    capabilities: [
+      { icon: MessagesSquare, title: "Real Two-Way SMS", body: "Every inbound and outbound message lands as a typed thread, tracked through status queued, sent, delivered, read or failed." },
+      { icon: FormInput, title: "Templates That Fill Themselves", body: "Canned replies merge fields from the linked client or lead record, so the patient's name and details drop in before you hit send." },
+      { icon: Eye, title: "Nothing Slips", body: "An is_unread flag and a tidy open or closed status mean the desk always knows what still needs a human." },
+    ],
+    highlights: [
+      {
+        eyebrow: "TRIAGE AND ASSIGN",
+        title: (
+          <>
+            {"Every thread "}<em>{"lands on the right desk"}</em>{"."}
+          </>
+        ),
+        body: "Set assigned_to and the conversation belongs to one nurse or receptionist, not the whole team's anxiety. Tags and an open or closed status keep the queue clean as the day moves.",
+        bullets: [
+          "assigned_to routes each thread to one staff member: reception · nurse · therapist",
+          "status open · closed and the is_unread flag keep triage honest",
+          "tags[] and last_message_preview let you scan the queue at a glance",
+        ],
+        mock: "thread",
+      },
+      {
+        eyebrow: "MERGE FROM THE RECORD",
+        title: (
+          <>
+            {"Templates that "}<em>{"already know the patient"}</em>{"."}
+          </>
+        ),
+        body: "Pick a canned template and merge fields pull live from the linked lead or client — first name, next action, skin_concerns — so each SMS reads as written for them. The reply is logged as message_type sms with direction outbound, tied to the same contact forever.",
+        bullets: [
+          "Merge fields draw from the contact: lead or client record, never re-typed",
+          "Sends recorded as message_type sms · direction outbound · author_type staff",
+          "Delivery tracked via provider_sid through status sent · delivered · read",
+        ],
+        mock: "audit",
+      },
+    ],
+    supporting: [
+      { icon: Repeat, title: "Scheduled Sends", body: "Queue a message with scheduled_for and it leaves at the right moment without anyone watching the clock." },
+      { icon: ClipboardCheck, title: "Linked To The Record", body: "Each thread sits against its contact_type lead, client or anon, so context travels with the conversation." },
+      { icon: ShieldCheck, title: "Clinic-Scoped", body: "Every inbox is bounded by clinic_id under row-level security, with data resident in Sydney." },
+      { icon: FileCheck, title: "Internal Notes", body: "Drop a message_type internal_note with direction internal to brief a colleague without texting the patient." },
+    ],
+    closingPrimary: "Clear the inbox by lunch.",
+    closingSecondary: "Triage, assign, reply, done.",
+  },
+
+  "calls": {
+    hookSecondary: "land in the thread, recorded.",
+    expandedBody: "Calls brings phone into the platform: place and receive calls in-app over Twilio, with each one recorded, transcribed, and summarised. Every call drops into the same conversation thread as a call_log entry, alongside the SMS and email already there. It is in beta and rolling out clinic by clinic, so expect the surface to keep sharpening as it lands.",
+    capabilities: [
+      { icon: Phone, title: "In-app calling", body: "Dial and answer over Twilio without leaving the patient's thread, with direction logged as inbound, outbound, or missed." },
+      { icon: Mic, title: "Recorded and transcribed", body: "Each connected call captures a recording_url and full transcript automatically, no toggles to remember." },
+      { icon: Activity, title: "Beta, rolling out", body: "Calls is in active beta and switching on clinic by clinic, so a few edges are still settling as it reaches your centre." },
+    ],
+    highlights: [
+      {
+        eyebrow: "ONE THREAD, EVERY CHANNEL",
+        title: (
+          <>
+            {"The call lives "}<em>{"next to the texts"}</em>{"."}
+          </>
+        ),
+        body: "A call is not a separate silo here. It arrives in the conversation as a message_type call_log, sitting in sequence with the sms and email so the whole exchange reads as one calm history.",
+        bullets: [
+          "Lands inline as message_type call_log, threaded by last_message_at",
+          "direction: inbound · outbound · missed, each marked at a glance",
+          "twilio_call_sid and duration_seconds stored for an honest record",
+        ],
+        mock: "thread",
+      },
+      {
+        eyebrow: "READ IT IN SECONDS",
+        title: (
+          <>
+            {"An AI summary "}<em>{"instead of a replay"}</em>{"."}
+          </>
+        ),
+        body: "You should not have to re-listen to a five-minute call to know what happened. Every call carries an ai_summary over the raw transcript, and a resolution_status so the next person knows whether anything is still open.",
+        bullets: [
+          "ai_summary distils the call; transcript kept for the full word",
+          "resolution_status: resolved · unresolved flags the follow-up",
+          "handled_by ties the call to the staff member who took it",
+        ],
+        mock: "audit",
+      },
+    ],
+    supporting: [
+      { icon: Bot, title: "Missed, not lost", body: "A direction of missed still creates a call_log, so nothing slips past unanswered." },
+      { icon: FileCheck, title: "Full transcript", body: "Every recording is transcribed to searchable text held against the call_log record." },
+      { icon: ShieldCheck, title: "Clinic-scoped", body: "Call logs sit behind the clinic_id RLS boundary, with data resident in Sydney." },
+      { icon: ClipboardCheck, title: "Owned by name", body: "handled_by records who fielded each call, so accountability is built in rather than assumed." },
+    ],
+    closingPrimary: "Take the call, keep the record.",
+    closingSecondary: "Recorded, summarised, in the thread.",
+  },
+
+  "ai-instant-answers": {
+    hookSecondary: "answers the question while you sleep.",
+    expandedBody: "AI Instant Answers reads every inbound SMS, recognises the common ones — opening hours, pricing, parking, aftercare — and replies in seconds, 24/7. Each reply is sent as author_type automation with message_type sms, so it sits plainly in the thread alongside your team's messages. When the question is unfamiliar or even slightly clinical, it stays quiet and hands the conversation to a person.",
+    capabilities: [
+      { icon: Bot, title: "Replies in seconds", body: "Inbound texts are intent-matched and answered automatically, landing in the thread as author_type automation, direction outbound, status delivered." },
+      { icon: ShieldCheck, title: "Never clinical", body: "Anything touching treatment, dosing or symptoms is escalated to a nurse or therapist — it answers logistics, never advice." },
+      { icon: Activity, title: "Always awake", body: "Questions at 11pm get the same calm reply as questions at 11am, with no one rostered on." },
+    ],
+    highlights: [
+      {
+        eyebrow: "MATCHED BY INTENT",
+        title: (
+          <>
+            {"It knows the difference between "}<em>{"\"how much\" and \"is this normal\""}</em>{"."}
+          </>
+        ),
+        body: "Common, answerable questions get an instant reply; everything else is left for a human. The model matches intent, not keywords, so phrasing never trips it up.",
+        bullets: [
+          "Auto-handled intents: opening hours · pricing · parking · aftercare logistics",
+          "Replies sent as author_type automation, message_type sms, direction outbound",
+          "Uncertain or clinical questions skip the auto-reply and wait for staff",
+        ],
+        mock: "thread",
+      },
+      {
+        eyebrow: "A CLEAN HANDOFF",
+        title: (
+          <>
+            {"When it isn't sure, it "}<em>{"steps back"}</em>{"."}
+          </>
+        ),
+        body: "No guessing, no almost-right answers. The conversation stays open and assigned for your reception or nursing team to pick up, with the full context already in the thread.",
+        bullets: [
+          "Escalations leave conversations.status open for staff follow-up",
+          "Clinical queries route to staff.role nurse · therapist — never auto-answered",
+          "Every automation reply is logged in messages with provider_sid and metadata",
+        ],
+        mock: "audit",
+      },
+    ],
+    supporting: [
+      { icon: Eye, title: "Visible as automation", body: "Auto-replies are clearly marked author_type automation so staff always know what was machine-sent." },
+      { icon: MessagesSquare, title: "Stays in thread", body: "Every answer appears in the same conversation, never a separate system message or detached log." },
+      { icon: FileCheck, title: "Fully audited", body: "Each reply is written to messages with status, scheduled_for and provider_sid for a complete record." },
+      { icon: Syringe, title: "Clinician-gated", body: "Aftercare wording stays logistical; anything clinical is handed to a registered practitioner." },
+    ],
+    closingPrimary: "Answer the easy ones instantly.",
+    closingSecondary: "Escalate the rest to a human.",
+  },
+
+  "automations": {
+    hookSecondary: "that run the clinic for you.",
+    expandedBody: "Automations is a visual workflow builder for your clinic. A trigger fires when something real happens — an appointment booked, a lead created, a payment_requests row reaching PAID, an appointments.status of no_show — then conditions branch the path and actions do the work: send an sms or email, create a task, wait, or charge a card. When you would rather describe than draw, the AI assistant turns a plain-English sentence into a working workflow you can review and edit.",
+    capabilities: [
+      { icon: Workflow, title: "Real triggers", body: "Start a flow the moment leads.status changes, an appointment is booked, or appointments.status flips to no_show." },
+      { icon: Bot, title: "AI drafts it", body: "Describe the outcome in plain English and the assistant builds the trigger, branches, and actions for you to approve." },
+      { icon: Zap, title: "Branching logic", body: "Split the path on conditions so a CLOG_SET lead and an EXPIRED one never get the same message." },
+    ],
+    highlights: [
+      {
+        eyebrow: "TRIGGERS TO ACTIONS",
+        title: (
+          <>
+            {"From a single event to a "}<em>{"whole sequence"}</em>{"."}
+          </>
+        ),
+        body: "Every workflow begins with a trigger and ends with something done, with branches in between. Wait a day, check a condition, then send an sms, draft an email, create a task, or raise a charge — all in one canvas.",
+        bullets: [
+          "Triggers: appointment booked · lead created · payment_requests.status PAID · appointments.status no_show",
+          "Actions: send sms · email · create task · wait · charge",
+          "Branch on leads.status NOT_BOOKED · OFFERED · BOOKED · CLOG_SET · COMPLETED",
+        ],
+        mock: "audit",
+      },
+      {
+        eyebrow: "DESCRIBE IT, DON'T DRAW IT",
+        title: (
+          <>
+            {"An AI assistant that "}<em>{"writes the workflow"}</em>{"."}
+          </>
+        ),
+        body: "Type \"text a reminder when an appointment is a no_show, then offer a rebook\" and the assistant lays out the trigger, condition, and actions. You review each node, adjust the wait or the message, and switch it on.",
+        bullets: [
+          "Plain-English prompt becomes a trigger → condition → action chain",
+          "Generated messages send as message_type sms or email, direction outbound",
+          "Charge actions create a payment_requests row with amount_cents, status PENDING",
+        ],
+        mock: "thread",
+      },
+    ],
+    supporting: [
+      { icon: Repeat, title: "Timed waits", body: "Insert a wait step so follow-ups land hours or days later, using scheduled_for on the queued message." },
+      { icon: CreditCard, title: "Charge on cue", body: "Trigger a payment_requests row the instant a lead reaches CONSULT_PURCHASED, GST inclusive at round(total_cents / 11)." },
+      { icon: ShieldCheck, title: "Clinic-scoped", body: "Every workflow and message it sends is bound to clinic_id under RLS, so nothing crosses a tenant boundary." },
+      { icon: ClipboardCheck, title: "Auditable runs", body: "Each action writes a message with author_type automation, so every step a flow took is on the record." },
+    ],
+    closingPrimary: "Stop chasing every step.",
+    closingSecondary: "Trigger, branch, done.",
+  },
+
+  "campaigns": {
+    hookSecondary: "that respect every consent line.",
+    expandedBody: "Campaigns sends targeted email and SMS to audiences built from your real data, not a static list you maintain by hand. Segment on clients.status INACTIVE, last_treatment_at, division SKIN or DMD, or a lead's ai_score_tier, pick a template, and schedule the send. Every message respects consent and stays inside AHPRA cosmetic advertising guidelines.",
+    capabilities: [
+      { icon: Megaphone, title: "Real-data segments", body: "Build an audience from clients.status INACTIVE, last_treatment_at and division SKIN/DMD instead of exporting a spreadsheet." },
+      { icon: Calendar, title: "Scheduled sends", body: "Set messages.scheduled_for and the campaign goes out at the right hour without anyone at the desk." },
+      { icon: ShieldCheck, title: "AHPRA-aware", body: "Consent is enforced and copy is held to the cosmetic guidelines, so no before/after promises slip through." },
+    ],
+    highlights: [
+      {
+        eyebrow: "AUDIENCE FROM LIVE DATA",
+        title: (
+          <>
+            {"The segment is a query, "}<em>{"never a stale list"}</em>{"."}
+          </>
+        ),
+        body: "You describe who you want and Campaigns assembles them from the same tables your team works in every day. Re-run it tomorrow and the audience is already up to date.",
+        bullets: [
+          "Filter on clients.status INACTIVE and last_treatment_at to win back lapsed treatment",
+          "Split by division SKIN · DMD · BOTH so the message fits the service",
+          "Target warm leads by ai_score_tier with ai_score_reasoning behind every pick",
+        ],
+        mock: "client",
+      },
+      {
+        eyebrow: "TEMPLATES, SCHEDULED, TRACKED",
+        title: (
+          <>
+            {"Write once, send "}<em>{"on your terms"}</em>{"."}
+          </>
+        ),
+        body: "Start from the template library, choose email or SMS, and queue it for the moment that lands best. Each recipient becomes a real message you can follow from queued through to read.",
+        bullets: [
+          "message_type sms or email, drawn from a shared template library",
+          "messages.scheduled_for queues the send; status moves queued · sent · delivered · read",
+          "author_type automation keeps campaign sends distinct from staff replies in the thread",
+        ],
+        mock: "thread",
+      },
+    ],
+    supporting: [
+      { icon: MessagesSquare, title: "Email and SMS", body: "Run the same campaign across message_type email and sms without rebuilding the audience." },
+      { icon: Activity, title: "Delivery tracking", body: "Watch status delivered and read per recipient instead of guessing whether it landed." },
+      { icon: FileCheck, title: "Template library", body: "Reuse approved, on-brand copy so every send starts compliant rather than from a blank page." },
+      { icon: TrendingUp, title: "Reactivation built in", body: "Pair last_treatment_at with clients.status INACTIVE to bring quiet clients back in." },
+    ],
+    closingPrimary: "Reach the right clients.",
+    closingSecondary: "Segment, schedule, send.",
+  },
+
+  "lead-management": {
+    hookSecondary: "scored before you reply.",
+    expandedBody: "Lead Management is a CRM pipeline built directly on the leads table, moving every enquiry through a fixed status flow from NOT_BOOKED to COMPLETED. Each lead is scored by AI on arrival, with ai_score, ai_score_tier, ai_score_reasoning and a suggested ai_next_action, so your reception team always knows who to call first. Saved views slice the pipeline however your clinic works, and a single conversion sets client_uuid to turn the lead into a client.",
+    capabilities: [
+      { icon: TrendingUp, title: "Scored on arrival", body: "Every lead lands with an ai_score and ai_score_tier so the hottest enquiries surface at the top of the list." },
+      { icon: Workflow, title: "One clear pipeline", body: "Leads advance through status NOT_BOOKED, OFFERED, BOOKED, CLOG_SET, CONSULT_PURCHASED and COMPLETED without guesswork." },
+      { icon: Eye, title: "Views that stick", body: "Saved filters on source, division and skin_concerns[] mean your morning list is ready before you open it." },
+    ],
+    highlights: [
+      {
+        eyebrow: "AI SCORING, NOT GUESSWORK",
+        title: (
+          <>
+            {"Know who to call "}<em>{"before the day starts"}</em>{"."}
+          </>
+        ),
+        body: "Each lead carries a transparent score with the reasoning written out in plain language, not a black-box number. The platform also proposes the next move, so reception spends time calling rather than deciding.",
+        bullets: [
+          "ai_score and ai_score_tier rank the pipeline at a glance",
+          "ai_score_reasoning shows the why behind every tier",
+          "ai_next_action suggests the move, timestamped at ai_scored_at",
+        ],
+        mock: "client",
+      },
+      {
+        eyebrow: "PIPELINE TO PATIENT",
+        title: (
+          <>
+            {"From first enquiry to "}<em>{"booked and converted"}</em>{"."}
+          </>
+        ),
+        body: "The status flow mirrors how a cosmetic clinic actually qualifies and books, with CANCELLED and EXPIRED handled cleanly rather than left hanging. When a lead converts, client_uuid is set and the record carries its conversion_outcome forward.",
+        bullets: [
+          "status NOT_BOOKED to COMPLETED, with CANCELLED and EXPIRED",
+          "source PURCHASED_CONSULT and DISCOVERY_CALL tracked per lead",
+          "conversion sets client_uuid; non_conversion_reason captured when it doesn't",
+        ],
+        mock: "audit",
+      },
+    ],
+    supporting: [
+      { icon: FormInput, title: "Skin concerns captured", body: "skin_concerns[] and properties (jsonb) hold the detail each consult needs without forcing it into rigid fields." },
+      { icon: Activity, title: "Division aware", body: "Filter and route by division across DMD, SKIN or BOTH so each side of the clinic sees its own pipeline." },
+      { icon: Phone, title: "Last touch in view", body: "last_contacted_at keeps follow-ups honest and stops warm leads going quiet." },
+      { icon: ShieldCheck, title: "Isolated per clinic", body: "Every lead is scoped by clinic_id under RLS, with data resident in Sydney." },
+    ],
+    closingPrimary: "Score the lead. Work the pipeline.",
+    closingSecondary: "Book, convert, and never lose track.",
+  },
+
+  "capture-forms": {
+    hookSecondary: "turn the website into a pipeline.",
+    expandedBody: "Capture Forms are branded, embeddable enquiry forms that live on your clinic's own website and write straight into your pipeline. Each submission creates a leads row, maps answers into leads.properties (jsonb) and skin_concerns[], stamps the source, and can fire an automation the moment it lands. No exports, no inbox triage — a website visitor becomes a tracked lead in seconds.",
+    capabilities: [
+      { icon: FormInput, title: "Form to lead", body: "Every submission creates a leads row with status NOT_BOOKED, ready for the next action." },
+      { icon: Zap, title: "Instant reply", body: "A new enquiry can trigger an automation — like an instant outbound SMS — before the visitor closes the tab." },
+      { icon: TrendingUp, title: "Tracked source", body: "UTM and channel data land on the lead so you know which campaign actually filled the pipeline." },
+    ],
+    highlights: [
+      {
+        eyebrow: "STRAIGHT INTO THE PIPELINE",
+        title: (
+          <>
+            {"A submission isn't an email — it's a "}<em>{"scored lead"}</em>{"."}
+          </>
+        ),
+        body: "The form maps each field to a real column, so concerns and contact details arrive structured, not as free text in someone's inbox. The lead is created ready for AI scoring and the next action.",
+        bullets: [
+          "Answers map into leads.properties (jsonb) and skin_concerns[]",
+          "source set to PURCHASED_CONSULT or DISCOVERY_CALL on creation",
+          "Created with status NOT_BOOKED, awaiting ai_score and ai_next_action",
+        ],
+        mock: "client",
+      },
+      {
+        eyebrow: "REPLY BEFORE THEY COOL",
+        title: (
+          <>
+            {"The fastest reply is the one that's "}<em>{"already sent"}</em>{"."}
+          </>
+        ),
+        body: "A capture form can fire an automation the instant it's submitted, so a warm enquiry gets an answer in seconds. Every touch is logged as a message against the lead's conversation.",
+        bullets: [
+          "Triggers a message with author_type automation, direction outbound",
+          "Tracked through status queued · sent · delivered · read",
+          "Stamps last_contacted_at the moment the SMS goes out",
+        ],
+        mock: "thread",
+      },
+    ],
+    supporting: [
+      { icon: Megaphone, title: "Marketing attribution", body: "UTM parameters are captured into leads.properties so spend ties back to real enquiries." },
+      { icon: Syringe, title: "Division routing", body: "Route enquiries to the right team by setting division to DMD, SKIN or BOTH." },
+      { icon: ShieldCheck, title: "Tenant-safe", body: "Every captured lead is scoped to your clinic_id under row-level security from the first byte." },
+      { icon: Sparkles, title: "Branded to you", body: "Embed a form styled to your centre's brand, not a generic third-party widget." },
+    ],
+    closingPrimary: "Stop losing the visitor.",
+    closingSecondary: "Capture, score, reply.",
+  },
+
+  "reviews": {
+    hookSecondary: "that respect the rules.",
+    expandedBody: "Reviews requests, collects, moderates and replies to patient feedback in one place. An automation fires the moment an appointment reaches status completed, inviting the patient to share their experience — and every reply is held for moderation before it ever goes public, so nothing reaches Google without a human eye. Service and experience reviews are framed to stay within AHPRA's restrictions on testimonials about regulated treatments.",
+    capabilities: [
+      { icon: Repeat, title: "Auto-request", body: "A review invite is queued automatically when an appointment hits status completed, with no manual chasing." },
+      { icon: Eye, title: "Moderate first", body: "Every incoming review waits for staff approval before it can be published or funnelled outward." },
+      { icon: Star, title: "Reply in-app", body: "Respond to each review from the same thread, recorded against the patient like any other message author_type." },
+    ],
+    highlights: [
+      {
+        eyebrow: "REQUEST THEN MODERATE",
+        title: (
+          <>
+            {"Nothing goes public "}<em>{"until you say so"}</em>{"."}
+          </>
+        ),
+        body: "The request is triggered by automation off appointments.status completed, then the patient's reply lands in a moderation queue rather than on the public web. You approve, hold, or decline — only approved reviews surface in dashboards and reporting.",
+        bullets: [
+          "Trigger: automation fires on appointments.status completed",
+          "Invite delivered as a message with message_type sms or email",
+          "Held for approval before publish — scoped to clinic_id under RLS",
+        ],
+        mock: "audit",
+      },
+      {
+        eyebrow: "FUNNEL THE HAPPY ONES",
+        title: (
+          <>
+            {"Send your best patients "}<em>{"to Google"}</em>{"."}
+          </>
+        ),
+        body: "Happy patients are gently routed toward your public Google profile, while everything else stays an internal, private signal you can act on. The whole exchange lives in the thread, replies and all, attributed to staff so accountability is never in question.",
+        bullets: [
+          "Replies attributed to author_type staff with direction outbound",
+          "Delivery tracked by status queued · sent · delivered · failed",
+          "Frame around experience and service — AHPRA-safe, no treatment claims",
+        ],
+        mock: "thread",
+      },
+    ],
+    supporting: [
+      { icon: ShieldCheck, title: "AHPRA-aware", body: "Copy and prompts steer reviews toward experience and service, away from testimonials about regulated treatments." },
+      { icon: Activity, title: "Surfaced in reporting", body: "Approved reviews feed straight into dashboards alongside the rest of your clinic metrics." },
+      { icon: MessagesSquare, title: "One thread", body: "Requests and replies sit in the same conversation as sms, email and the patient's other channels." },
+      { icon: ClipboardCheck, title: "Full trail", body: "Every approval, decline and reply is logged append-only and scoped to your clinic_id." },
+    ],
+    closingPrimary: "Ask at the right moment.",
+    closingSecondary: "Approve, reply, publish.",
+  },
+
+  "loyalty": {
+    hookSecondary: "tracked on the client record.",
+    expandedBody: "Loyalty rewards repeat patients without turning your clinic into a points arcade. Earn on visits or spend, redeem at the till as a sale discount, and watch real repeat behaviour surface from last_treatment_at and lifecycle_stage — all tied to the same client record your team already trusts.",
+    capabilities: [
+      { icon: Star, title: "Earn on visits", body: "Points or visit counts accrue against the client record every time a sale is recorded at the till." },
+      { icon: CreditCard, title: "Redeem at checkout", body: "Rewards apply as a discount on the sale, reducing amount_cents before the GST-inclusive total is rendered." },
+      { icon: Activity, title: "See who returns", body: "Repeat behaviour reads off last_treatment_at and lifecycle_stage, so loyal patients are visible, not guessed at." },
+    ],
+    highlights: [
+      {
+        eyebrow: "EARN AT THE TILL",
+        title: (
+          <>
+            {"Loyalty that lives on the "}<em>{"sale"}</em>{", not a side app."}
+          </>
+        ),
+        body: "Every reward is anchored to the client record and the sale it came from, so nothing drifts out of sync. Points or visits accrue on checkout and redeem the same way — as a clean line on the receipt.",
+        bullets: [
+          "Rewards redeem as a sale discount against amount_cents, rendered $x,xxx.xx",
+          "GST stays inclusive: round(total_cents / 11) recalculated after the discount",
+          "Every accrual scoped to clinic_id under RLS — no leakage across tenants",
+        ],
+        mock: "sale",
+      },
+      {
+        eyebrow: "REPEAT BEHAVIOUR, MEASURED",
+        title: (
+          <>
+            {"Know who's "}<em>{"actually coming back"}</em>{"."}
+          </>
+        ),
+        body: "Loyalty isn't a vanity counter — it tracks the signals that matter for retention. Patient cadence surfaces from last_treatment_at, and lifecycle_stage tells you who's lapsing before they're gone.",
+        bullets: [
+          "Repeat cadence derived from last_treatment_at on the client record",
+          "lifecycle_stage flags active, at-risk and lapsed patients at a glance",
+          "Pairs with memberships and packages so recurring patients compound, not overlap",
+        ],
+        mock: "membership",
+      },
+    ],
+    supporting: [
+      { icon: Repeat, title: "Visit or points", body: "Choose visit-based or points-based earning per clinic, whichever suits how you reward return patients." },
+      { icon: Heart, title: "Pairs with memberships", body: "Loyalty sits alongside memberships and packages rather than competing with them for the same patient." },
+      { icon: ShieldCheck, title: "Tenant-safe by default", body: "Balances and redemptions are isolated by clinic_id under RLS, with data resident in Sydney." },
+      { icon: Eye, title: "Quiet by design", body: "No badges, no confetti — rewards read as a discount line on the sale and a number on the client record." },
+    ],
+    closingPrimary: "Reward the patients who return.",
+    closingSecondary: "Earn, track, redeem — quietly.",
   },
 };
 
@@ -1161,6 +1617,7 @@ export function FeatureDetailPage({ slug }: { slug: string }) {
               <div className="inline-flex mb-6">
                 <EyebrowTag icon={HeroIcon}>
                   {categoryLabel} · {feature.name}
+                  {feature.status !== "shipped" ? " · Beta" : ""}
                 </EyebrowTag>
               </div>
             </Reveal>

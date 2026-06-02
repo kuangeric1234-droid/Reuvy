@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import clsx from "clsx";
 import { AnimatePresence, motion } from "motion/react";
@@ -40,7 +41,8 @@ import {
   SEGMENT_GROUPS,
   type Segment,
 } from "@/lib/marketing/segments";
-import { useHeroCarousel } from "@/lib/hero-carousel-store";
+
+const MotionLink = motion.create(Link);
 
 type DropdownKey = "features" | "who" | "why" | "resources" | null;
 
@@ -231,10 +233,17 @@ export function SiteNav() {
         {/* LEFT: Logo */}
         <Link
           href="/"
-          className="flex items-center gap-[9px] font-serif text-[25px] tracking-[-0.02em] text-black shrink-0"
+          aria-label="Ruevii — home"
+          className="flex items-center shrink-0"
         >
-          <LogoMark />
-          Ruevii
+          <Image
+            src="/ruevii-logo.png"
+            alt="Ruevii"
+            width={89}
+            height={28}
+            priority
+            className="h-[27px] w-auto"
+          />
         </Link>
 
         {/* CENTER: nav links (absolutely centered) */}
@@ -395,19 +404,9 @@ function FeaturesPanel({
   onHoverIn: () => void;
   onHoverOut: () => void;
 }) {
-  const setActiveBySlug = useHeroCarousel((s) => s.setActiveBySlug);
   const categories = FEATURE_CATEGORIES;
   const current =
     categories.find((c) => c.key === activeTab) ?? categories[0];
-
-  const onItemClick = (slug: string) => (e: React.MouseEvent) => {
-    e.preventDefault();
-    const matched = setActiveBySlug(slug);
-    // scroll to the hero carousel section, not to top
-    const target = document.getElementById(matched ? "hero-carousel" : "features");
-    target?.scrollIntoView({ behavior: "smooth", block: matched ? "center" : "start" });
-    onClose();
-  };
 
   return (
     <motion.div
@@ -504,10 +503,10 @@ function FeaturesPanel({
                     const Icon = f.icon;
                     const desc = f.oneLiner;
                     return (
-                      <motion.a
+                      <MotionLink
                         key={f.slug ?? f.name}
-                        href="#hero-carousel"
-                        onClick={onItemClick(f.slug)}
+                        href={`/features/${f.slug}`}
+                        onClick={onClose}
                         variants={{
                           hidden: { opacity: 0, y: 6 },
                           visible: { opacity: 1, y: 0 },
@@ -535,7 +534,7 @@ function FeaturesPanel({
                             </span>
                           )}
                         </span>
-                      </motion.a>
+                      </MotionLink>
                     );
                   })}
                 </motion.div>
@@ -978,16 +977,5 @@ function ResourcesPanel({
         </div>
       </div>
     </motion.div>
-  );
-}
-
-function LogoMark() {
-  return (
-    <span
-      aria-hidden
-      className="relative w-[22px] h-[22px] rounded-[5px] bg-black grid place-items-center"
-    >
-      <span className="w-2 h-2 rounded-full bg-[var(--color-paper)]" />
-    </span>
   );
 }
