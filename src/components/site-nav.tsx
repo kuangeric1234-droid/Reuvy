@@ -35,6 +35,11 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { FEATURE_CATEGORIES, LATEST_RELEASE } from "@/lib/marketing/features";
+import {
+  SEGMENT_BY_SLUG,
+  SEGMENT_GROUPS,
+  type Segment,
+} from "@/lib/marketing/segments";
 import { useHeroCarousel } from "@/lib/hero-carousel-store";
 
 type DropdownKey = "features" | "who" | "why" | "resources" | null;
@@ -47,98 +52,23 @@ const NAV_LINKS: { label: string; key: DropdownKey; href?: string }[] = [
   { label: "Pricing", key: null, href: "#pricing" },
 ];
 
-/* ---------- Who we're for ---------- */
-type WhoItem = { name: string; icon: LucideIcon };
-type WhoGroup = { key: string; label: string; icon: LucideIcon; tagline: string; items: WhoItem[] };
-
-const WHO_GROUPS: WhoGroup[] = [
-  {
-    key: "aesthetics",
-    label: "Aesthetic & cosmetic clinics",
-    icon: Sparkles,
-    tagline: "Built for AU cosmetic injectables & medical aesthetics.",
-    items: [
-      { name: "Med Spa", icon: Sparkles },
-      { name: "Aesthetic Clinic", icon: Sparkles },
-      { name: "Cosmetic Injectors", icon: Syringe },
-      { name: "Dermatology", icon: ShieldCheck },
-      { name: "Cosmetic Surgery", icon: Stethoscope },
-      { name: "Cosmetic Dentistry", icon: Award },
-    ],
-  },
-  {
-    key: "skin-laser",
-    label: "Skin & laser",
-    icon: Scan,
-    tagline: "Skin-led practices, lasers and resurfacing.",
-    items: [
-      { name: "Skin Clinic", icon: Scan },
-      { name: "Laser Hair Removal", icon: Scan },
-      { name: "Laser Resurfacing", icon: Scan },
-      { name: "Hair Transplant", icon: Users },
-      { name: "Tattoo Removal", icon: Scan },
-      { name: "Day Spa", icon: Heart },
-    ],
-  },
-  {
-    key: "wellness",
-    label: "Wellness & longevity",
-    icon: Heart,
-    tagline: "Preventive care, IV, longevity and weight programs.",
-    items: [
-      { name: "Wellness", icon: Heart },
-      { name: "Longevity", icon: Activity },
-      { name: "IV Therapy", icon: HeartPulse },
-      { name: "Functional Medicine", icon: Stethoscope },
-      { name: "Metabolic Health", icon: Activity },
-      { name: "Weight Loss", icon: Activity },
-    ],
-  },
-  {
-    key: "health",
-    label: "Women's & men's health",
-    icon: HeartPulse,
-    tagline: "Hormonal, sexual and reproductive health practices.",
-    items: [
-      { name: "HRT", icon: HeartPulse },
-      { name: "Women's Health", icon: HeartPulse },
-      { name: "Men's Health", icon: Stethoscope },
-      { name: "Sexual Health", icon: Heart },
-      { name: "Pelvic Health", icon: HeartPulse },
-      { name: "Fertility", icon: HeartPulse },
-    ],
-  },
-  {
-    key: "mental",
-    label: "Mental health & therapy",
-    icon: Brain,
-    tagline: "Talk therapy, psychology and allied therapy practices.",
-    items: [
-      { name: "Mental Health", icon: Brain },
-      { name: "Psychology", icon: Brain },
-      { name: "Therapy & Counselling", icon: Brain },
-      { name: "Coaching", icon: GraduationCap },
-      { name: "Speech Therapy", icon: GraduationCap },
-    ],
-  },
-];
-
-const WHO_RIGHT_RAIL = {
-  role: [
-    { name: "Practice Owner", icon: Briefcase },
-    { name: "Practice Manager", icon: UserCheck },
-    { name: "Cosmetic Doctor", icon: Stethoscope },
-    { name: "Cosmetic Nurse", icon: Syringe },
-    { name: "Front-of-House", icon: Users },
-  ],
-  size: [
-    { name: "Solo practitioner", icon: MapPin },
-    { name: "Single location", icon: Building },
-    { name: "Multi-location", icon: Building2 },
-    { name: "Franchise group", icon: Building2 },
-  ],
-  other: [{ name: "All specialties", icon: ChevronRight }],
+/* ---------- Who we serve (AU-only segments) ---------- */
+type WhoNavGroup = {
+  key: string;
+  label: string;
+  icon: LucideIcon;
+  tagline: string;
+  slugs: string[];
 };
+
+// Tab metadata for the mega-menu — backed by SEGMENT_GROUPS in segments.ts.
+const WHO_NAV_GROUPS: WhoNavGroup[] = SEGMENT_GROUPS.map((g) => ({
+  key: g.key,
+  label: g.label,
+  tagline: g.tagline,
+  icon: g.key === "clinic-type" ? Sparkles : Building,
+  slugs: g.slugs,
+}));
 
 /* ---------- Why us (AHPRA-flavoured) ---------- */
 type WhyItem = { name: string; icon: LucideIcon; hint?: string };
@@ -671,6 +601,7 @@ function FeaturesPanel({
 /* ---------- Who we're for Mega Panel ---------- */
 
 function WhoPanel({
+  onClose,
   onHoverIn,
   onHoverOut,
 }: {
@@ -678,9 +609,12 @@ function WhoPanel({
   onHoverIn: () => void;
   onHoverOut: () => void;
 }) {
-  const [tab, setTab] = useState(WHO_GROUPS[0].key);
-  const current = WHO_GROUPS.find((g) => g.key === tab) ?? WHO_GROUPS[0];
+  const [tab, setTab] = useState(WHO_NAV_GROUPS[0].key);
+  const current = WHO_NAV_GROUPS.find((g) => g.key === tab) ?? WHO_NAV_GROUPS[0];
   const CurrentIcon = current.icon;
+  const segments: Segment[] = current.slugs
+    .map((s) => SEGMENT_BY_SLUG[s])
+    .filter(Boolean);
 
   return (
     <motion.div
@@ -695,14 +629,14 @@ function WhoPanel({
       <div
         className="bg-white border border-[var(--color-greige)] rounded-2xl overflow-hidden"
         style={{
-          width: "min(1100px, 94vw)",
+          width: "min(880px, 92vw)",
           boxShadow: "0 30px 80px -30px rgba(15,29,43,0.25)",
         }}
       >
         <div className="flex">
           {/* LEFT RAIL — group tabs */}
-          <div className="w-[260px] shrink-0 p-3 relative">
-            {WHO_GROUPS.map((g) => {
+          <div className="w-[240px] shrink-0 p-3 relative">
+            {WHO_NAV_GROUPS.map((g) => {
               const isActive = g.key === current.key;
               const Icon = g.icon;
               return (
@@ -752,6 +686,17 @@ function WhoPanel({
                 </button>
               );
             })}
+
+            <div className="mt-3 pt-3 border-t border-[var(--color-greige)] px-2">
+              <Link
+                href="/who-we-serve"
+                onClick={onClose}
+                className="inline-flex items-center gap-1.5 text-[12.5px] text-[var(--color-blue-ink)] hover:opacity-70 transition-opacity"
+              >
+                See all segments
+                <ChevronRight size={13} />
+              </Link>
+            </div>
           </div>
 
           <div className="w-px bg-[var(--color-greige)]" />
@@ -772,67 +717,41 @@ function WhoPanel({
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -4 }}
                 transition={{ duration: 0.18, ease: PANEL_EASE }}
-                className="grid grid-cols-2 gap-x-3 gap-y-0.5"
+                className="grid grid-cols-1 gap-x-3 gap-y-1"
               >
-                {current.items.map((it) => {
-                  const Icon = it.icon;
+                {segments.map((s) => {
+                  const Icon = s.icon;
                   return (
-                    <a
-                      key={it.name}
-                      href="#"
-                      className="group flex items-center gap-2.5 p-2 rounded-lg hover:bg-[var(--color-greige-2)] transition-colors"
+                    <Link
+                      key={s.slug}
+                      href={`/who-we-serve/${s.slug}`}
+                      onClick={onClose}
+                      className="group flex items-start gap-3 p-2.5 rounded-lg hover:bg-[var(--color-greige-2)] transition-colors"
                     >
-                      <span className="w-8 h-8 shrink-0 rounded-md grid place-items-center bg-[color-mix(in_srgb,var(--color-blue)_15%,white)]">
-                        <Icon size={15} className="text-[var(--color-blue-ink)]" />
+                      <span className="w-9 h-9 shrink-0 rounded-md grid place-items-center bg-[color-mix(in_srgb,var(--color-blue)_15%,white)]">
+                        <Icon
+                          size={15}
+                          className="text-[var(--color-blue-ink)]"
+                        />
                       </span>
-                      <span className="text-[13px] font-medium text-black leading-tight">
-                        {it.name}
+                      <span className="flex-1 min-w-0 pt-px">
+                        <span className="block text-[13.5px] font-medium text-black leading-tight">
+                          {s.name}
+                        </span>
+                        <span className="block text-[11.5px] text-[var(--color-charcoal)] leading-snug mt-[3px] line-clamp-1">
+                          <span className="text-black/80">{s.hookPrimary}</span>{" "}
+                          {s.hookSecondary}
+                        </span>
                       </span>
-                    </a>
+                    </Link>
                   );
                 })}
               </motion.div>
             </AnimatePresence>
           </div>
-
-          <div className="w-px bg-[var(--color-greige)]" />
-
-          {/* RIGHT RAIL — Role / Size / Other */}
-          <div className="w-[220px] shrink-0 p-5">
-            <RailSection title="Role" items={WHO_RIGHT_RAIL.role} />
-            <RailSection title="Business size" items={WHO_RIGHT_RAIL.size} className="mt-5" />
-            <RailSection title="Other" items={WHO_RIGHT_RAIL.other} className="mt-5" />
-          </div>
         </div>
       </div>
     </motion.div>
-  );
-}
-
-function RailSection({
-  title,
-  items,
-  className,
-}: {
-  title: string;
-  items: { name: string; icon: LucideIcon }[];
-  className?: string;
-}) {
-  return (
-    <div className={className}>
-      <p className="font-mono text-[9.5px] tracking-[0.14em] uppercase text-[var(--color-charcoal)] mb-2 px-2">
-        {title}
-      </p>
-      {items.map((it) => (
-        <a
-          key={it.name}
-          href="#"
-          className="block px-2 py-1.5 rounded-md text-[13px] text-black hover:bg-[var(--color-greige-2)] transition-colors"
-        >
-          {it.name}
-        </a>
-      ))}
-    </div>
   );
 }
 
