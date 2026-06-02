@@ -1,18 +1,50 @@
 "use client";
 
-import { motion } from "motion/react";
+import { useEffect, useState } from "react";
+import { AnimatePresence, motion } from "motion/react";
+import { Sparkles } from "lucide-react";
 import { HeroCarousel } from "@/components/home/hero-carousel";
+import { EyebrowTag } from "@/components/ui/eyebrow-tag";
 
 const EASE = [0.21, 0.61, 0.27, 1] as const;
 
+const ROTATING_WORDS = [
+  "aesthetics clinic",
+  "med spa",
+  "skin & laser clinic",
+  "injectable clinic",
+  "cosmetic practice",
+] as const;
+
 export function Hero() {
+  const [wordIndex, setWordIndex] = useState(0);
+
+  useEffect(() => {
+    const id = setInterval(() => {
+      setWordIndex((i) => (i + 1) % ROTATING_WORDS.length);
+    }, 3200);
+    return () => clearInterval(id);
+  }, []);
+
+  const currentWord = ROTATING_WORDS[wordIndex];
+
   return (
     <section className="wrap pt-[84px] pb-[72px] text-center max-md:pt-14 max-md:pb-12">
+      {/* Eyebrow tag */}
+      <motion.div
+        initial={{ opacity: 0, y: 8 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, ease: EASE }}
+        className="flex justify-center mb-[18px]"
+      >
+        <EyebrowTag icon={Sparkles}>RUEVII · ALL-IN-ONE CLINIC OS</EyebrowTag>
+      </motion.div>
+
       {/* Trust pill */}
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.55, ease: EASE }}
+        transition={{ duration: 0.55, ease: EASE, delay: 0.08 }}
         className="inline-flex items-center gap-[10px] bg-white border border-[var(--color-greige)] rounded-full pl-2 pr-[14px] py-[7px] text-[13px] text-[var(--color-charcoal)] mb-[30px]"
       >
         <span className="flex">
@@ -28,7 +60,7 @@ export function Hero() {
       <motion.h1
         initial="hidden"
         animate="show"
-        variants={{ hidden: {}, show: { transition: { staggerChildren: 0.04, delayChildren: 0.1 } } }}
+        variants={{ hidden: {}, show: { transition: { staggerChildren: 0.04, delayChildren: 0.18 } } }}
         className="text-[clamp(40px,6vw,78px)] font-normal mx-auto max-w-[16ch] tracking-[-0.025em] leading-[1.02]"
       >
         {["The", "operating", "system", "for", "your"].map((w, i) => (
@@ -43,16 +75,39 @@ export function Hero() {
             {w}
           </motion.span>
         ))}
-        <motion.em
+
+        {/* Rotating last word */}
+        <motion.span
           variants={{
             hidden: { opacity: 0, y: 18, filter: "blur(6px)" },
             show: { opacity: 1, y: 0, filter: "blur(0px)", transition: { duration: 0.7, ease: EASE } },
           }}
-          className="inline-block"
-          style={{ fontStyle: "italic", color: "var(--color-blue-ink)" }}
+          className="inline-flex align-baseline relative overflow-hidden"
+          style={{
+            // give the rotator enough room — sized to the longest phrase.
+            minWidth: "12ch",
+            verticalAlign: "baseline",
+          }}
         >
-          aesthetics clinic
-        </motion.em>
+          <AnimatePresence mode="wait" initial={false}>
+            <motion.em
+              key={currentWord}
+              initial={{ opacity: 0, y: "0.6em", filter: "blur(4px)" }}
+              animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+              exit={{ opacity: 0, y: "-0.6em", filter: "blur(4px)" }}
+              transition={{ duration: 0.55, ease: EASE }}
+              className="inline-block whitespace-nowrap"
+              style={{
+                fontStyle: "italic",
+                color: "var(--color-blue-ink)",
+                fontSize: "inherit",
+                lineHeight: "inherit",
+              }}
+            >
+              {currentWord}
+            </motion.em>
+          </AnimatePresence>
+        </motion.span>
       </motion.h1>
 
       <motion.p
@@ -73,7 +128,7 @@ export function Hero() {
         className="flex gap-3 justify-center mt-[34px] max-md:flex-col max-md:items-stretch"
       >
         <motion.a
-          href="#pricing"
+          href="/demo"
           whileHover={{ y: -1 }}
           whileTap={{ y: 1 }}
           transition={{ type: "spring", stiffness: 420, damping: 26 }}

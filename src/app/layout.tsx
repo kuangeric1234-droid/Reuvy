@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist_Mono } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
+import { AnnouncementBar } from "@/components/ui/announcement-bar";
 
 const geistMono = Geist_Mono({
   subsets: ["latin"],
@@ -29,6 +30,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en-AU" className={geistMono.variable}>
       <body className="min-h-screen antialiased">
         <Script src="/cleanup-sw.js" strategy="beforeInteractive" />
+        <AnnouncementBar href="/compliance" linkLabel="Read more">
+          Australian-made and AHPRA-native — built for AU cosmetic & aesthetics clinics.
+        </AnnouncementBar>
         {children}
       </body>
     </html>

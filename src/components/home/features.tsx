@@ -2,6 +2,7 @@
 
 import { motion } from "motion/react";
 import { ReactNode } from "react";
+import { EyebrowTag } from "@/components/ui/eyebrow-tag";
 
 const EASE = [0.21, 0.61, 0.27, 1] as const;
 
@@ -12,15 +13,15 @@ export function Features() {
   return (
     <section id="features" className="wrap section">
       <div className="max-w-[640px] mb-[18px]">
-        <motion.p
+        <motion.div
           initial={{ opacity: 0, y: 8 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-60px" }}
           transition={{ duration: 0.5, ease: EASE }}
-          className="eyebrow"
+          className="inline-flex mb-[22px]"
         >
-          One platform
-        </motion.p>
+          <EyebrowTag>WHAT&apos;S INSIDE</EyebrowTag>
+        </motion.div>
         <motion.h2
           initial={{ opacity: 0, y: 14 }}
           whileInView={{ opacity: 1, y: 0 }}
