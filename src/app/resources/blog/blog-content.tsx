@@ -52,7 +52,7 @@ type Post = {
 };
 
 const FEATURED: Post = {
-  slug: "#",
+  slug: "/resources/blog/ahpra-cosmetic-rules-2026",
   category: "AHPRA",
   title: "The AHPRA cosmetic injectable rules: what changed in 2026",
   excerpt:
@@ -76,7 +76,7 @@ const POSTS: Post[] = [
     tint: "mid",
   },
   {
-    slug: "#",
+    slug: "/resources/blog/ruevii-ai-command-bar",
     category: "AI",
     title: "Why we built Ruevii AI as a command bar, not a chatbot",
     excerpt:
@@ -87,7 +87,7 @@ const POSTS: Post[] = [
     tint: "haze",
   },
   {
-    slug: "#",
+    slug: "/resources/blog/s4-register-audit-checklist",
     category: "AHPRA",
     title: "S4 register audits: what to expect from the AHPRA assessor",
     excerpt:
@@ -98,7 +98,7 @@ const POSTS: Post[] = [
     tint: "cool",
   },
   {
-    slug: "#",
+    slug: "/resources/blog/pricing-memberships-aud",
     category: "Marketing",
     title: "Pricing memberships in your aesthetics clinic — AUD edition",
     excerpt:
@@ -120,7 +120,7 @@ const POSTS: Post[] = [
     tint: "dust",
   },
   {
-    slug: "#",
+    slug: "/resources/blog/pabau-to-ruevii-migration",
     category: "Migration",
     title: "From Pabau to Ruevii in 14 days: the migration we ran",
     excerpt:
@@ -131,8 +131,8 @@ const POSTS: Post[] = [
     tint: "ink",
   },
   {
-    slug: "#",
-    category: "AHPRA",
+    slug: "/resources/blog/data-residency-au",
+    category: "Operations",
     title: "Why AU data residency matters for cosmetic clinics",
     excerpt:
       "Where your patient photos live is now a Privacy Act question. A short primer on Sydney-hosted PHI.",
