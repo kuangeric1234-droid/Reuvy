@@ -72,9 +72,12 @@ export function HeroCarousel() {
         })}
       </div>
 
-      {/* Triptych stage — full-bleed (extends beyond .wrap to viewport edges) */}
+      {/* Triptych stage — full-bleed (extends beyond .wrap to viewport edges).
+          Cards are top-anchored (not centred) so the gap under the tab pills is
+          constant across modules; the stage clears the tallest card (~545px)
+          plus its drop shadow so nothing is sliced by the overflow-hidden edge. */}
       <div
-        className="relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] w-screen h-[460px] sm:h-[540px] lg:h-[600px] overflow-hidden"
+        className="relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] w-screen h-[480px] sm:h-[560px] lg:h-[640px] overflow-hidden"
         onMouseEnter={() => setPaused(true)}
         onMouseLeave={() => setPaused(false)}
       >
@@ -107,7 +110,7 @@ export function HeroCarousel() {
                 zIndex: target.z,
               }}
               transition={{ duration: 0.85, ease: EASE }}
-              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[min(820px,52vw)] max-md:w-[min(680px,88vw)]"
+              className="absolute top-[28px] left-1/2 -translate-x-1/2 w-[min(820px,52vw)] max-md:w-[min(680px,88vw)]"
               style={{ pointerEvents: delta === 0 ? "auto" : "none" }}
             >
               <MockCard moduleKey={m.key} />
